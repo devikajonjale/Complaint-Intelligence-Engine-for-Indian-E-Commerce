@@ -2,7 +2,7 @@
 __pycache__/
 *.pyc
 .env
-data/
-figures/
-models/
+#data/
+#figures/
+#models/
 .streamlit/secrets.toml
