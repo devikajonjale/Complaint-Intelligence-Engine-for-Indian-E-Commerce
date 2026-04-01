@@ -71,7 +71,14 @@ else:
 
 fdf = df[df["platform"].isin(platform_filter) & df["star_bucket"].isin(star_filter)].copy()
 if date_filter and len(date_filter) == 2:
-    start, end = pd.to_datetime(date_filter[0]), pd.to_datetime(date_filter[1])
+    start_d, end_d = date_filter[0], date_filter[1]
+    # CSV "at" is often tz-aware (UTC); naive Timestamps cannot be compared to tz-aware series
+    if fdf["at"].dt.tz is not None:
+        start = pd.Timestamp(start_d, tz="UTC")
+        end = pd.Timestamp(end_d, tz="UTC") + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1)
+    else:
+        start = pd.Timestamp(start_d)
+        end = pd.Timestamp(end_d) + pd.Timedelta(days=1) - pd.Timedelta(microseconds=1)
     fdf = fdf[(fdf["at"] >= start) & (fdf["at"] <= end)]
 
 tab1, tab2, tab3, tab4 = st.tabs(["Live Pulse", "Complaint Landscape", "Spike Tracker", "Critical Alerts"])
