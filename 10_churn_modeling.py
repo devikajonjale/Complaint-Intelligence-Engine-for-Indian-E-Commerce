@@ -14,6 +14,9 @@ from sklearn.svm import SVC
 
 from ml_utils import DATA_DIR, MODELS_DIR, REPORTS_DIR, binary_metrics, ensure_dirs, measure_latency_ms, update_selected_model
 
+import warnings
+warnings.filterwarnings("ignore")
+
 
 def build_proxy_label(df: pd.DataFrame) -> pd.Series:
     # Proxy churn risk when explicit user identifiers are unavailable.

@@ -1,3 +1,9 @@
+"""
+Step 7 — Visualization of the data
+Input:  data/final_reviews.csv
+Output: figures/
+"""
+
 import logging
 from pathlib import Path
 import pandas as pd
@@ -5,6 +11,9 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+import warnings
+warnings.filterwarnings("ignore")
 
 # -------------------------------
 # CONFIG
@@ -32,7 +41,7 @@ def save_plot(name):
     plt.close()
 
 # -------------------------------
-# LOAD DATA
+# LOAD + CLEAN DATA
 # -------------------------------
 def load_data():
     candidates = [
@@ -50,8 +59,23 @@ def load_data():
 
     df = pd.read_csv(final_path, encoding="utf-8-sig")
 
+    # Create review_length if missing
     if 'content' in df.columns and 'review_length' not in df.columns:
         df['review_length'] = df['content'].astype(str).apply(len)
+
+    # Convert numeric-like columns properly
+    numeric_candidates = [
+        'score', 'review_length', 'thumbs_up',
+        'kmeans_cluster', 'hdbscan_cluster',
+        'isolation_score', 'ocsvm_score',
+        'umap_1', 'umap_2'
+    ]
+
+    for col in numeric_candidates:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+
+    df = df.dropna(subset=[col for col in numeric_candidates if col in df.columns])
 
     if FAST_MODE:
         df = df.sample(n=min(5000, len(df)), random_state=42)
@@ -64,41 +88,41 @@ numeric_df = df.select_dtypes(include=[np.number])
 palette = sns.color_palette("husl", 10)
 
 # -------------------------------
-# CHART 21: Correlation Heatmap
+# HEATMAP
 # -------------------------------
 if not numeric_df.empty:
     plt.figure()
-    sns.heatmap(numeric_df.corr(), cmap="coolwarm", annot=True, fmt=".2f")
-    plt.title("Correlation Heatmap of Numerical Features")
+    sns.heatmap(numeric_df.corr(), cmap="coolwarm", annot=True)
+    plt.title("Correlation Heatmap")
     plt.xlabel("Features")
     plt.ylabel("Features")
-    save_plot("chart_21_heatmap")
+    save_plot("new_heatmap")
 
 # -------------------------------
-# CHART 22–24: Distributions
+# DISTRIBUTIONS
 # -------------------------------
-for i, col in enumerate(['score', 'review_length', 'thumbs_up'], start=22):
+for col in ['score', 'review_length', 'thumbs_up']:
     if col in df.columns:
         plt.figure()
-        sns.histplot(df[col], kde=not FAST_MODE, color=palette[i % 10])
-        plt.title(f"Distribution of {col}")
+        sns.histplot(df[col], kde=not FAST_MODE, color=palette[0])
+        plt.title(f"{col} Distribution")
         plt.xlabel(col)
         plt.ylabel("Frequency")
-        save_plot(f"chart_{i}_{col}")
+        save_plot(f"new_{col}_distribution")
 
 # -------------------------------
-# CHART 25: Boxplot
+# BOXPLOT
 # -------------------------------
 if {'kmeans_cluster', 'score'}.issubset(df.columns):
     plt.figure()
     sns.boxplot(x='kmeans_cluster', y='score', data=df, palette='Set2')
-    plt.title("Score Distribution across Clusters")
     plt.xlabel("Cluster")
     plt.ylabel("Score")
-    save_plot("chart_25_boxplot")
+    plt.title("Score vs Cluster")
+    save_plot("new_score_vs_cluster")
 
 # -------------------------------
-# CHART 26: Scatter
+# SCATTER
 # -------------------------------
 if {'review_length', 'score'}.issubset(df.columns):
     plt.figure()
@@ -106,65 +130,64 @@ if {'review_length', 'score'}.issubset(df.columns):
         x='review_length', y='score',
         hue='score', palette='viridis', data=df
     )
-    plt.title("Score vs Review Length")
     plt.xlabel("Review Length")
     plt.ylabel("Score")
     plt.legend(title="Score")
-    save_plot("chart_26_scatter")
+    plt.title("Score vs Review Length")
+    save_plot("new_score_vs_length")
 
 # -------------------------------
-# CHART 27–28: Countplots
+# COUNTPLOTS
 # -------------------------------
-for i, col in enumerate(['kmeans_cluster', 'hdbscan_cluster'], start=27):
+for col in ['kmeans_cluster', 'hdbscan_cluster']:
     if col in df.columns:
         plt.figure()
         ax = sns.countplot(x=col, data=df, palette='tab10')
-        plt.title(f"{col} Distribution")
         plt.xlabel(col)
         plt.ylabel("Count")
+        plt.title(f"{col} Distribution")
 
         for p in ax.patches:
-            ax.annotate(f'{int(p.get_height())}',
-                        (p.get_x() + p.get_width() / 2., p.get_height()),
+            ax.annotate(int(p.get_height()),
+                        (p.get_x() + p.get_width()/2, p.get_height()),
                         ha='center', va='bottom')
 
-        save_plot(f"chart_{i}_{col}")
+        save_plot(f"new_{col}_count")
 
 # -------------------------------
-# CHART 29–30: Anomaly Scores
+# ANOMALY DISTRIBUTIONS
 # -------------------------------
-for i, col in enumerate(['isolation_score', 'ocsvm_score'], start=29):
+for col in ['isolation_score', 'ocsvm_score']:
     if col in df.columns:
         plt.figure()
-        sns.histplot(df[col], kde=not FAST_MODE, color=palette[i % 10])
-        plt.title(f"Distribution of {col}")
+        sns.histplot(df[col], kde=not FAST_MODE, color=palette[1])
+        plt.title(f"{col} Distribution")
         plt.xlabel(col)
         plt.ylabel("Frequency")
-        save_plot(f"chart_{i}_{col}")
+        save_plot(f"new_{col}_distribution")
 
 # -------------------------------
-# CHART 31: Pairplot
+# PAIRPLOT
 # -------------------------------
 pair_cols = [c for c in ['score', 'review_length', 'thumbs_up'] if c in df.columns]
 if len(pair_cols) >= 2:
     sample_df = df[pair_cols].sample(n=min(1000, len(df)), random_state=42)
-    g = sns.pairplot(sample_df, palette='husl')
+    g = sns.pairplot(sample_df)
     g.fig.suptitle("Pairwise Relationships", y=1.02)
-    g.savefig(FIG_DIR / "chart_31_pairplot.png", dpi=150 if FAST_MODE else 300)
+    g.savefig(FIG_DIR / "new_pairplot.png")
     plt.close()
 
 # -------------------------------
-# CHART 32: Violin
+# VIOLIN
 # -------------------------------
 if 'score' in df.columns:
     plt.figure()
     sns.violinplot(y=df['score'], color='skyblue')
-    plt.title("Score Distribution (Violin Plot)")
-    plt.ylabel("Score")
-    save_plot("chart_32_violin")
+    plt.title("Score Distribution")
+    save_plot("new_violin")
 
 # -------------------------------
-# CHART 33: UMAP
+# UMAP
 # -------------------------------
 if {'umap_1', 'umap_2', 'kmeans_cluster'}.issubset(df.columns):
     plt.figure()
@@ -172,26 +195,26 @@ if {'umap_1', 'umap_2', 'kmeans_cluster'}.issubset(df.columns):
         x='umap_1', y='umap_2',
         hue='kmeans_cluster', palette='tab10', data=df
     )
-    plt.title("UMAP Projection of Clusters")
+    plt.title("UMAP Projection")
     plt.xlabel("UMAP 1")
     plt.ylabel("UMAP 2")
     plt.legend(title="Cluster")
-    save_plot("chart_33_umap")
+    save_plot("new_umap")
 
 # -------------------------------
-# CHART 34: Trend
+# TREND
 # -------------------------------
 if 'score' in df.columns:
     plt.figure()
     sorted_scores = df['score'].sort_values().reset_index(drop=True)
-    plt.plot(sorted_scores, color='black')
+    plt.plot(sorted_scores)
     plt.title("Sorted Score Trend")
     plt.xlabel("Index")
     plt.ylabel("Score")
-    save_plot("chart_34_trend")
+    save_plot("new_trend")
 
 # -------------------------------
-# CHART 35: KDE
+# KDE
 # -------------------------------
 if {'score', 'review_length'}.issubset(df.columns):
     plt.figure()
@@ -199,73 +222,24 @@ if {'score', 'review_length'}.issubset(df.columns):
     sns.kdeplot(df['review_length'], label='Review Length')
     plt.legend()
     plt.title("KDE Comparison")
-    plt.xlabel("Value")
-    plt.ylabel("Density")
-    save_plot("chart_35_kde")
+    save_plot("new_kde")
 
 # -------------------------------
-# CHART 36: Barplot
+# BARPLOT
 # -------------------------------
 if {'kmeans_cluster', 'score'}.issubset(df.columns):
     plt.figure()
-    cluster_means = df.groupby('kmeans_cluster')['score'].mean().reset_index()
-    ax = sns.barplot(x='kmeans_cluster', y='score', data=cluster_means, palette='Set1')
-
-    for p in ax.patches:
-        ax.annotate(f'{p.get_height():.2f}',
-                    (p.get_x() + p.get_width() / 2., p.get_height()),
-                    ha='center', va='bottom')
-
+    means = df.groupby('kmeans_cluster')['score'].mean().reset_index()
+    sns.barplot(x='kmeans_cluster', y='score', data=means, palette='Set1')
     plt.title("Average Score per Cluster")
-    plt.xlabel("Cluster")
-    plt.ylabel("Average Score")
-    save_plot("chart_36_bar")
+    save_plot("new_bar")
 
 # -------------------------------
-# CHART 37: Boxplot
-# -------------------------------
-if {'kmeans_cluster', 'review_length'}.issubset(df.columns):
-    plt.figure()
-    sns.boxplot(x='kmeans_cluster', y='review_length', data=df, palette='pastel')
-    plt.title("Review Length vs Cluster")
-    plt.xlabel("Cluster")
-    plt.ylabel("Review Length")
-    save_plot("chart_37_box")
-
-# -------------------------------
-# CHART 38: Scatter
-# -------------------------------
-if {'isolation_score', 'ocsvm_score'}.issubset(df.columns):
-    plt.figure()
-    sns.scatterplot(
-        x='isolation_score', y='ocsvm_score',
-        color='darkgreen', data=df
-    )
-    plt.title("Isolation Forest vs OC-SVM Scores")
-    plt.xlabel("Isolation Score")
-    plt.ylabel("OC-SVM Score")
-    save_plot("chart_38_scatter")
-
-# -------------------------------
-# CHART 39: UMAP Heatmap
-# -------------------------------
-umap_cols = [col for col in df.columns if 'umap' in col]
-if len(umap_cols) > 1:
-    plt.figure()
-    sns.heatmap(df[umap_cols].corr(), cmap='viridis', annot=True)
-    plt.title("UMAP Feature Correlation")
-    plt.xlabel("UMAP Features")
-    plt.ylabel("UMAP Features")
-    save_plot("chart_39_umap_heatmap")
-
-# -------------------------------
-# CHART 40: Pie Chart
+# PIE
 # -------------------------------
 if 'kmeans_cluster' in df.columns:
     plt.figure()
-    df['kmeans_cluster'].value_counts().plot.pie(
-        autopct='%1.1f%%', colormap='Set3'
-    )
+    df['kmeans_cluster'].value_counts().plot.pie(autopct='%1.1f%%')
     plt.title("Cluster Distribution")
     plt.ylabel("")
-    save_plot("chart_40_pie")
+    save_plot("new_pie")

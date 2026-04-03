@@ -17,6 +17,9 @@ from sklearn.svm import LinearSVC
 
 from ml_utils import DATA_DIR, MODELS_DIR, REPORTS_DIR, ensure_dirs, measure_latency_ms, multiclass_metrics, update_selected_model
 
+import warnings
+warnings.filterwarnings("ignore")
+
 
 def main() -> None:
     ensure_dirs()

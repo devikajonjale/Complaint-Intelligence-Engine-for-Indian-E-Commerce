@@ -9,6 +9,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
+import warnings
+warnings.filterwarnings("ignore")
+
 st.set_page_config(page_title="Complaint Intelligence Engine+", layout="wide")
 
 DATA_DIR    = Path("data")

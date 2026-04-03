@@ -1,14 +1,10 @@
 """
 Step 1 — Live Data Ingestion
-Complaint Intelligence Engine | MSc Data Science, NMIMS NSoMASA
-
 Pulls reviews from 5 Indian e-commerce apps via Google Play Store
 and supplementary posts from Reddit using PRAW.
 
+Input:  N/A
 Outputs: data/raw_reviews.csv
-
-Install:
-    pip install google-play-scraper praw pandas python-dotenv
 """
 
 import os
@@ -21,6 +17,9 @@ import pandas as pd
 from google_play_scraper import Sort, reviews
 import praw
 from dotenv import load_dotenv
+
+import warnings
+warnings.filterwarnings("ignore")
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")

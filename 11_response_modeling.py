@@ -10,6 +10,9 @@ import pandas as pd
 
 from ml_utils import DATA_DIR, MODELS_DIR, REPORTS_DIR, ensure_dirs, update_selected_model
 
+import warnings
+warnings.filterwarnings("ignore")
+
 EMPATHY_TOKENS = {"sorry", "apologize", "understand", "regret"}
 ACTION_TOKENS = {"share", "provide", "check", "resolve", "contact", "update", "refund"}
 

@@ -1,7 +1,5 @@
 ﻿cluster_id,cluster_name,size,top_terms
-0,Delivery Failure,292,"good, बह, nice, अचछ, very, बह अचछ, very good, flipkart, very nice, experience"
-1,Refund & Payment Issues,677,"delivery, not, the, and, is, amazon, नह, to, very, my"
-2,Fake/Counterfeit Product,222,"hai, app, bahut, app hai, bhi, ke, nhi, nahi, hi, he"
-3,App Crash / UX Bug,408,"best, good, products, product, quality, shopping, very, and, for, price"
-4,Size/Quality Mismatch,317,"app, good, very, best, nice, this, अचछ, good app, ऐप, nice app"
-5,Positive Experience,371,"hai, bahut, aap, acha, achha, achcha, bhut, hi, me, he"
+0,Delivery Failure,608,"delivery, the, not, and, amazon, is, to, order, app, my"
+1,Refund & Payment Issues,591,"hai, bahut, acha, aap, app, achcha, achha, hi, he, app hai"
+2,Fake/Counterfeit Product,451,"app, best, shopping, good, very, for, this, nice, अचछ, is"
+3,App Crash / UX Bug,630,"good, बह, very, best, nice, अचछ, product, products, very good, quality"

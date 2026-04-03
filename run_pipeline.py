@@ -3,6 +3,9 @@
 import subprocess
 import sys
 
+import warnings
+warnings.filterwarnings("ignore")
+
 SCRIPTS = [
     "01_ingest.py",
     "02_preprocess.py",

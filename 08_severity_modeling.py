@@ -17,6 +17,9 @@ from sklearn.svm import LinearSVC
 
 from ml_utils import DATA_DIR, MODELS_DIR, REPORTS_DIR, ensure_dirs, measure_latency_ms, multiclass_metrics, update_selected_model
 
+import warnings
+warnings.filterwarnings("ignore")
+
 LEGAL_PAT = re.compile(r"\b(fraud|legal|police|consumer court|ncdrc|chargeback|harassment|scam)\b", re.I)
 MONEY_PAT = re.compile(r"\b(refund|money|charged|payment|upi|wallet|bank|transaction|deducted)\b", re.I)
 

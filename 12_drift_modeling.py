@@ -7,6 +7,9 @@ import pandas as pd
 
 from ml_utils import DATA_DIR, REPORTS_DIR, ensure_dirs, update_selected_model
 
+import warnings
+warnings.filterwarnings("ignore")
+
 
 def jensen_shannon(p: np.ndarray, q: np.ndarray) -> float:
     p = p / max(p.sum(), 1e-9)

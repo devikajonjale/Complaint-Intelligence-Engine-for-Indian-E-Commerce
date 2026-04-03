@@ -1,14 +1,9 @@
 """
 Step 2 — Text Preprocessing, Cleaning & Feature Engineering
-Complaint Intelligence Engine | MSc Data Science, NMIMS NSoMASA
-
 Input:  data/raw_reviews.csv
 Output: data/cleaned_reviews.csv
         data/tfidf_matrix.npz
         data/tfidf_vocab.json
-
-Install:
-    pip install pandas numpy scikit-learn langdetect scipy
 """
 
 import json
@@ -22,6 +17,9 @@ import pandas as pd
 from langdetect import detect, LangDetectException
 from scipy.sparse import save_npz
 from sklearn.feature_extraction.text import TfidfVectorizer
+
+import warnings
+warnings.filterwarnings("ignore")
 
 warnings.filterwarnings("ignore")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")

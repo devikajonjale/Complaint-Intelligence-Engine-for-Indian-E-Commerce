@@ -17,6 +17,9 @@ from scipy.sparse import load_npz
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score, silhouette_score
 
+import warnings
+warnings.filterwarnings("ignore")
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 log = logging.getLogger(__name__)
 

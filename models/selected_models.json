@@ -1,12 +1,12 @@
 {
   "severity": {
-    "selected_model": "logreg",
+    "selected_model": "gradient_boosting",
     "primary_metric": 1.0,
     "metrics_file": "reports/metrics_severity.csv"
   },
   "router": {
     "selected_model": "linear_svc_tfidf",
-    "primary_metric": 0.8888476757523227,
+    "primary_metric": 0.9024814471243043,
     "metrics_file": "reports/metrics_router.csv"
   },
   "churn": {
@@ -16,7 +16,7 @@
   },
   "response_generation": {
     "selected_model": "template_v1",
-    "primary_metric": 0.5809437910525757,
+    "primary_metric": 0.5863650984136818,
     "metrics_file": "reports/metrics_response.csv"
   },
   "drift": {
