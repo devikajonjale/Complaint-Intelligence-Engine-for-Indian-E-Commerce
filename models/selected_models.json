@@ -5,18 +5,18 @@
     "metrics_file": "reports/metrics_severity.csv"
   },
   "router": {
-    "selected_model": "rf_tfidf",
-    "primary_metric": 0.8160009510753468,
+    "selected_model": "linear_svc_tfidf",
+    "primary_metric": 0.932188380852603,
     "metrics_file": "reports/metrics_router.csv"
   },
   "churn": {
-    "selected_model": "gradient_boosting",
+    "selected_model": "random_forest",
     "primary_metric": 1.0,
     "metrics_file": "reports/metrics_churn.csv"
   },
   "response_generation": {
     "selected_model": "template_v1",
-    "primary_metric": 0.5875726947175506,
+    "primary_metric": 0.5862763843659223,
     "metrics_file": "reports/metrics_response.csv"
   },
   "drift": {

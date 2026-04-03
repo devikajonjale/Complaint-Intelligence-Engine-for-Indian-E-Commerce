@@ -1,225 +1,236 @@
-"""
-ULTIMATE Visualization Engine (20+ Charts)
-Includes:
-- EDA
-- Clustering
-- Model Evaluation
-- Model Comparison
-- Business Insights
-- Interactive Plotly Dashboards
-"""
-
 import logging
 from pathlib import Path
-
 import pandas as pd
 import numpy as np
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-import plotly.express as px
-import plotly.graph_objects as go
-
-from sklearn.metrics import confusion_matrix, roc_curve, auc, precision_recall_curve
-from sklearn.decomposition import PCA
-
+# -------------------------------
+# CONFIG
+# -------------------------------
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 DATA_DIR = Path("data")
-REPORTS_DIR = Path("reports")
 FIG_DIR = Path("figures")
 FIG_DIR.mkdir(exist_ok=True)
 
-sns.set_theme(style="whitegrid", palette="Set2")
+sns.set_theme(style="darkgrid")
+plt.rcParams['figure.figsize'] = (10, 6)
 
+FAST_MODE = True 
 
-# =========================
-# 📊 1–6 EDA VISUALS
-# =========================
-
-def eda_visuals(df):
-    # 1 Missing heatmap
-    plt.figure(figsize=(10, 6))
-    sns.heatmap(df.isnull(), cbar=False, cmap="viridis")
-    plt.title("Missing Values Heatmap")
-    plt.savefig(FIG_DIR / "1_missing_heatmap.png")
+# -------------------------------
+# SAVE FUNCTION
+# -------------------------------
+def save_plot(name):
+    path = FIG_DIR / f"{name}.png"
+    plt.tight_layout()
+    plt.savefig(path, dpi=150 if FAST_MODE else 300)
+    log.info(f"Saved: {path}")
     plt.close()
 
-    # 2 Text length
-    if "review_text" in df.columns:
-        df["len"] = df["review_text"].astype(str).apply(len)
-        sns.histplot(df["len"], bins=50, kde=True, color="purple")
-        plt.title("Text Length Distribution")
-        plt.savefig(FIG_DIR / "2_text_length.png")
-        plt.close()
+# -------------------------------
+# LOAD DATA
+# -------------------------------
+def load_data():
+    candidates = [
+        DATA_DIR / "final_reviews_response.csv",
+        DATA_DIR / "final_reviews_churn.csv",
+        DATA_DIR / "final_reviews_routed.csv",
+        DATA_DIR / "final_reviews_scored.csv",
+        DATA_DIR / "final_reviews.csv",
+    ]
 
-    # 3 Platform count
-    sns.countplot(data=df, x="platform", palette="coolwarm")
-    plt.title("Platform Distribution")
-    plt.xticks(rotation=20)
-    plt.savefig(FIG_DIR / "3_platform.png")
+    final_path = next((p for p in candidates if p.exists()), None)
+
+    if final_path is None:
+        raise FileNotFoundError("No dataset found in /data")
+
+    df = pd.read_csv(final_path, encoding="utf-8-sig")
+
+    if 'content' in df.columns and 'review_length' not in df.columns:
+        df['review_length'] = df['content'].astype(str).apply(len)
+
+
+    if FAST_MODE:
+        df = df.sample(n=min(5000, len(df)), random_state=42)
+
+    return df
+
+df = load_data()
+numeric_df = df.select_dtypes(include=[np.number])
+
+palette_husl = sns.color_palette("husl", 10)
+
+# -------------------------------
+# CHART 1: Correlation Heatmap
+# -------------------------------
+if not numeric_df.empty:
+    plt.figure()
+    sns.heatmap(numeric_df.corr(), cmap="coolwarm")
+    plt.title("Correlation Heatmap")
+    save_plot("chart_1_heatmap")
+
+# -------------------------------
+# CHART 2–4: Distributions
+# -------------------------------
+for i, (col, color, title) in enumerate([
+    ('score', 'purple', "Score Distribution"),
+    ('review_length', 'green', "Review Length"),
+    ('thumbs_up', 'orange', "Thumbs Up")
+], start=2):
+    if col in df.columns:
+        plt.figure()
+        sns.histplot(df[col], kde=not FAST_MODE, color=color)
+        plt.title(title)
+        save_plot(f"chart_{i}_{col}")
+
+# -------------------------------
+# CHART 5: Boxplot
+# -------------------------------
+if {'kmeans_cluster', 'score'}.issubset(df.columns):
+    plt.figure()
+    sns.boxplot(x='kmeans_cluster', y='score', data=df, palette='Set2')
+    plt.title("Score vs Cluster")
+    save_plot("chart_5_boxplot")
+
+# -------------------------------
+# CHART 6: Scatter
+# -------------------------------
+if {'review_length', 'score'}.issubset(df.columns):
+    plt.figure()
+    sns.scatterplot(
+        x='review_length', y='score',
+        hue='score', palette='viridis', data=df
+    )
+    plt.title("Score vs Review Length")
+    save_plot("chart_6_scatter")
+
+# -------------------------------
+# CHART 7–8: Countplots
+# -------------------------------
+for i, col in enumerate(['kmeans_cluster', 'hdbscan_cluster'], start=7):
+    if col in df.columns:
+        plt.figure()
+        sns.countplot(x=col, data=df, palette='tab10')
+        plt.title(f"{col} Distribution")
+        save_plot(f"chart_{i}_{col}")
+
+# -------------------------------
+# CHART 9–10: Anomaly Scores
+# -------------------------------
+for i, col in enumerate(['isolation_score', 'ocsvm_score'], start=9):
+    if col in df.columns:
+        plt.figure()
+        color = palette_husl[i % len(palette_husl)]
+        sns.histplot(df[col], kde=not FAST_MODE, color=color)
+        plt.title(f"{col} Distribution")
+        save_plot(f"chart_{i}_{col}")
+
+# -------------------------------
+# CHART 11: Pairplot (optimized)
+# -------------------------------
+pair_cols = [c for c in ['score', 'review_length', 'thumbs_up'] if c in df.columns]
+if len(pair_cols) >= 2:
+    sample_df = df[pair_cols].sample(n=min(1000, len(df)), random_state=42)
+    g = sns.pairplot(sample_df, palette='husl')
+    g.fig.suptitle("Pairplot", y=1.02)
+    g.savefig(FIG_DIR / "chart_11_pairplot.png", dpi=150 if FAST_MODE else 300)
     plt.close()
 
-    # 4 Boxplot length vs platform
-    if "len" in df.columns:
-        sns.boxplot(data=df, x="platform", y="len", palette="Set3")
-        plt.title("Text Length vs Platform")
-        plt.savefig(FIG_DIR / "4_boxplot.png")
-        plt.close()
+# -------------------------------
+# CHART 12: Violin
+# -------------------------------
+if 'score' in df.columns:
+    plt.figure()
+    sns.violinplot(y=df['score'], color='skyblue')
+    plt.title("Score Distribution")
+    save_plot("chart_12_violin")
 
-    # 5 Correlation heatmap
-    plt.figure(figsize=(10, 6))
-    sns.heatmap(df.select_dtypes(include=np.number).corr(), annot=True, cmap="coolwarm")
-    plt.title("Correlation Matrix")
-    plt.savefig(FIG_DIR / "5_corr.png")
-    plt.close()
+# -------------------------------
+# CHART 13: UMAP
+# -------------------------------
+if {'umap_1', 'umap_2', 'kmeans_cluster'}.issubset(df.columns):
+    plt.figure()
+    sns.scatterplot(
+        x='umap_1', y='umap_2',
+        hue='kmeans_cluster', palette='tab10', data=df
+    )
+    plt.title("UMAP Projection")
+    save_plot("chart_13_umap")
 
-    # 6 Distribution plot
-    df.select_dtypes(include=np.number).hist(figsize=(10, 8))
-    plt.suptitle("Numerical Distributions")
-    plt.savefig(FIG_DIR / "6_histograms.png")
-    plt.close()
+# -------------------------------
+# CHART 14: Trend
+# -------------------------------
+if 'score' in df.columns:
+    plt.figure()
+    sorted_scores = df['score'].sort_values().reset_index(drop=True)
+    plt.plot(sorted_scores, color='black')
+    plt.title("Sorted Score Trend")
+    save_plot("chart_14_trend")
 
+# -------------------------------
+# CHART 15: KDE
+# -------------------------------
+if {'score', 'review_length'}.issubset(df.columns):
+    plt.figure()
+    sns.kdeplot(df['score'], label='Score')
+    sns.kdeplot(df['review_length'], label='Review Length')
+    plt.legend()
+    plt.title("KDE Comparison")
+    save_plot("chart_15_kde")
 
-# =========================
-# 🤖 7–10 CLUSTERING
-# =========================
+# -------------------------------
+# CHART 16: Barplot
+# -------------------------------
+if {'kmeans_cluster', 'score'}.issubset(df.columns):
+    plt.figure()
+    cluster_means = df.groupby('kmeans_cluster')['score'].mean().reset_index()
+    sns.barplot(x='kmeans_cluster', y='score', data=cluster_means, palette='Set1')
+    plt.title("Avg Score per Cluster")
+    save_plot("chart_16_bar")
 
-def clustering_visuals(df, k_df=None):
-    if "cluster" in df.columns:
-        sns.countplot(data=df, x="cluster", palette="tab10")
-        plt.title("Cluster Distribution")
-        plt.savefig(FIG_DIR / "7_cluster.png")
-        plt.close()
+# -------------------------------
+# CHART 17: Boxplot
+# -------------------------------
+if {'kmeans_cluster', 'review_length'}.issubset(df.columns):
+    plt.figure()
+    sns.boxplot(x='kmeans_cluster', y='review_length', data=df, palette='pastel')
+    plt.title("Review Length vs Cluster")
+    save_plot("chart_17_box")
 
-    emb_cols = [c for c in df.columns if "embedding" in c]
-    if emb_cols:
-        X = df[emb_cols].fillna(0)
-        pca = PCA(n_components=2)
-        comp = pca.fit_transform(X)
+# -------------------------------
+# CHART 18: Scatter
+# -------------------------------
+if {'isolation_score', 'ocsvm_score'}.issubset(df.columns):
+    plt.figure()
+    sns.scatterplot(
+        x='isolation_score', y='ocsvm_score',
+        color='darkgreen', data=df
+    )
+    plt.title("Isolation vs OC-SVM")
+    save_plot("chart_18_scatter")
 
-        plt.scatter(comp[:, 0], comp[:, 1], c=df.get("cluster"), cmap="viridis")
-        plt.title("PCA Clusters")
-        plt.savefig(FIG_DIR / "8_pca.png")
-        plt.close()
+# -------------------------------
+# CHART 19: UMAP Heatmap
+# -------------------------------
+umap_cols = [col for col in df.columns if 'umap' in col]
+if len(umap_cols) > 1:
+    plt.figure()
+    sns.heatmap(df[umap_cols].corr(), cmap='viridis')
+    plt.title("UMAP Correlation")
+    save_plot("chart_19_umap_heatmap")
 
-        # 3D Plotly PCA (9)
-        fig = px.scatter_3d(x=comp[:, 0], y=comp[:, 1], z=np.random.rand(len(comp)),
-                            color=df.get("cluster"))
-        fig.write_html(FIG_DIR / "9_pca_3d.html")
-
-    if k_df is not None:
-        plt.plot(k_df["k"], k_df["silhouette"], marker="o")
-        plt.title("Silhouette Score")
-        plt.savefig(FIG_DIR / "10_silhouette.png")
-        plt.close()
-
-
-# =========================
-# 📈 11–15 MODEL EVALUATION
-# =========================
-
-def model_eval_visuals(y_true, y_pred, y_prob, model_name="model"):
-    # 11 Confusion Matrix
-    cm = confusion_matrix(y_true, y_pred)
-    sns.heatmap(cm, annot=True, fmt="d", cmap="coolwarm")
-    plt.title(f"{model_name} Confusion Matrix")
-    plt.savefig(FIG_DIR / f"11_cm_{model_name}.png")
-    plt.close()
-
-    # 12 ROC
-    fpr, tpr, _ = roc_curve(y_true, y_prob)
-    plt.plot(fpr, tpr, color="blue")
-    plt.title("ROC Curve")
-    plt.savefig(FIG_DIR / f"12_roc_{model_name}.png")
-    plt.close()
-
-    # 13 PR Curve
-    p, r, _ = precision_recall_curve(y_true, y_prob)
-    plt.plot(r, p, color="green")
-    plt.title("PR Curve")
-    plt.savefig(FIG_DIR / f"13_pr_{model_name}.png")
-    plt.close()
-
-    # 14 Plotly ROC (interactive)
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=fpr, y=tpr, mode='lines', name='ROC'))
-    fig.write_html(FIG_DIR / f"14_plotly_roc_{model_name}.html")
-
-    # 15 Plotly Confusion Matrix
-    fig = px.imshow(cm, text_auto=True, color_continuous_scale="RdBu")
-    fig.write_html(FIG_DIR / f"15_plotly_cm_{model_name}.html")
-
-
-# =========================
-# 🧠 16–18 MODEL COMPARISON
-# =========================
-
-def model_comparison():
-    path = REPORTS_DIR / "metrics_summary.csv"
-    if not path.exists():
-        return
-
-    df = pd.read_csv(path)
-
-    for i, metric in enumerate(["accuracy", "f1", "roc_auc"]):
-        sns.barplot(data=df, x="model", y=metric, palette="Set1")
-        plt.title(f"{metric} Comparison")
-        plt.savefig(FIG_DIR / f"{16+i}_{metric}.png")
-        plt.close()
-
-    # Plotly interactive leaderboard
-    fig = px.bar(df, x="model", y="accuracy", color="model")
-    fig.write_html(FIG_DIR / "19_leaderboard.html")
-
-
-# =========================
-# 📊 19–22 BUSINESS
-# =========================
-
-def business_visuals(df):
-    if "severity" in df.columns:
-        sns.countplot(data=df, x="platform", hue="severity")
-        plt.savefig(FIG_DIR / "20_platform_severity.png")
-        plt.close()
-
-    if "date" in df.columns:
-        df["date"] = pd.to_datetime(df["date"], errors="coerce")
-        df.groupby(df["date"].dt.date).size().plot()
-        plt.savefig(FIG_DIR / "21_trend.png")
-        plt.close()
-
-    # Pie chart (22)
-    if "platform" in df.columns:
-        fig = px.pie(df, names="platform")
-        fig.write_html(FIG_DIR / "22_pie.html")
-
-    # Treemap (23)
-    if "severity" in df.columns:
-        fig = px.treemap(df, path=["platform", "severity"])
-        fig.write_html(FIG_DIR / "23_treemap.html")
-
-
-# =========================
-# 🚀 MAIN
-# =========================
-
-def main():
-    df = pd.read_csv(DATA_DIR / "final_reviews.csv")
-
-    k_df = None
-    if (DATA_DIR / "k_selection.csv").exists():
-        k_df = pd.read_csv(DATA_DIR / "k_selection.csv")
-
-    eda_visuals(df)
-    clustering_visuals(df, k_df)
-    business_visuals(df)
-    model_comparison()
-
-    log.info("✅ 20+ visualizations generated!")
-
-
-if __name__ == "__main__":
-    main()
+# -------------------------------
+# CHART 20: Pie Chart
+# -------------------------------
+if 'kmeans_cluster' in df.columns:
+    plt.figure()
+    df['kmeans_cluster'].value_counts().plot.pie(
+        autopct='%1.1f%%', colormap='Set3'
+    )
+    plt.title("Cluster Distribution")
+    plt.ylabel("")
+    save_plot("chart_20_pie")
