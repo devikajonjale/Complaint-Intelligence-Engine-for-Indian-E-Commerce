@@ -85,12 +85,3 @@ git add .
 git commit -m "Initial commit: complaint intelligence engine end-to-end pipeline"
 gh repo create complaint-intelligence-engine --public --source . --remote origin --push
 ```
-
-## Streamlit Deployment
-
-1. Push project to GitHub.
-2. Go to [Streamlit Community Cloud](https://share.streamlit.io/).
-3. Click **New app** and select your repo.
-4. Set entrypoint as `app.py`.
-5. Add secrets (if needed) in Streamlit app settings.
-6. Deploy and share public URL.
