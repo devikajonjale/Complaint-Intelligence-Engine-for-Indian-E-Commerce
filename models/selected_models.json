@@ -1,22 +1,22 @@
 {
   "severity": {
-    "selected_model": "logreg",
+    "selected_model": "gradient_boosting",
     "primary_metric": 1.0,
     "metrics_file": "reports/metrics_severity.csv"
   },
   "router": {
-    "selected_model": "logreg_tfidf",
-    "primary_metric": 0.9453597275436356,
+    "selected_model": "rf_tfidf",
+    "primary_metric": 0.8160009510753468,
     "metrics_file": "reports/metrics_router.csv"
   },
   "churn": {
-    "selected_model": "random_forest",
-    "primary_metric": 0.9951190476190477,
+    "selected_model": "gradient_boosting",
+    "primary_metric": 1.0,
     "metrics_file": "reports/metrics_churn.csv"
   },
   "response_generation": {
-    "selected_model": "template_v3",
-    "primary_metric": 0.5940763544310284,
+    "selected_model": "template_v1",
+    "primary_metric": 0.5875726947175506,
     "metrics_file": "reports/metrics_response.csv"
   },
   "drift": {
