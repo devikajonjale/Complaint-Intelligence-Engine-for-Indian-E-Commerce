@@ -1,12 +1,12 @@
 {
   "severity": {
-    "selected_model": "gradient_boosting",
+    "selected_model": "logreg",
     "primary_metric": 1.0,
     "metrics_file": "reports/metrics_severity.csv"
   },
   "router": {
     "selected_model": "linear_svc_tfidf",
-    "primary_metric": 0.932188380852603,
+    "primary_metric": 0.8888476757523227,
     "metrics_file": "reports/metrics_router.csv"
   },
   "churn": {
@@ -16,12 +16,12 @@
   },
   "response_generation": {
     "selected_model": "template_v1",
-    "primary_metric": 0.5862763843659223,
+    "primary_metric": 0.5809437910525757,
     "metrics_file": "reports/metrics_response.csv"
   },
   "drift": {
     "selected_model": "weekly_centroid_plus_js",
-    "primary_metric": 0.1111111111111111,
+    "primary_metric": 0.14814814814814814,
     "metrics_file": "reports/metrics_drift.csv"
   }
 }
