@@ -5,23 +5,23 @@
     "metrics_file": "reports/metrics_severity.csv"
   },
   "router": {
-    "selected_model": "linear_svc_tfidf",
-    "primary_metric": 0.9438430136420008,
+    "selected_model": "logreg_tfidf",
+    "primary_metric": 0.9453597275436356,
     "metrics_file": "reports/metrics_router.csv"
   },
   "churn": {
     "selected_model": "random_forest",
-    "primary_metric": 0.9999999999999999,
+    "primary_metric": 0.9951190476190477,
     "metrics_file": "reports/metrics_churn.csv"
   },
   "response_generation": {
-    "selected_model": "template_v1",
-    "primary_metric": 0.5815971041592367,
+    "selected_model": "template_v3",
+    "primary_metric": 0.5940763544310284,
     "metrics_file": "reports/metrics_response.csv"
   },
   "drift": {
     "selected_model": "weekly_centroid_plus_js",
-    "primary_metric": 0.14814814814814814,
+    "primary_metric": 0.1111111111111111,
     "metrics_file": "reports/metrics_drift.csv"
   }
 }
