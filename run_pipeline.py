@@ -11,6 +11,11 @@ SCRIPTS = [
     "05_cluster.py",
     "06_anomaly.py",
     "07_visualize.py",
+    "08_severity_modeling.py",
+    "09_router_modeling.py",
+    "10_churn_modeling.py",
+    "11_response_modeling.py",
+    "12_drift_modeling.py",
 ]
 
 

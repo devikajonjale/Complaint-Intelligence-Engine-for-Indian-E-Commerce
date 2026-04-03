@@ -1,6 +1,6 @@
 # Complaint Intelligence Engine
 
-Unsupervised NLP pipeline for discovering complaint archetypes in Indian e-commerce reviews (Google Play + Reddit), with anomaly detection and Streamlit dashboard.
+End-to-end complaint intelligence and decision-support platform for Indian e-commerce reviews (Google Play + optional Reddit), with unsupervised discovery + supervised model benchmarking + Streamlit operations dashboard.
 
 ## Features
 
@@ -11,7 +11,12 @@ Unsupervised NLP pipeline for discovering complaint archetypes in Indian e-comme
 - K-Means + HDBSCAN clustering
 - Isolation Forest + One-Class SVM anomaly detection
 - Weekly complaint spike detection (rolling z-score)
-- 4-page Streamlit dashboard
+- Supervised severity triage model comparison and selection
+- Complaint auto-routing model comparison and selection
+- Churn risk proxy modeling and watchlist
+- Auto-response generator with quality scoring and best-generator selection
+- Topic drift detection across weekly windows
+- 10-tab Streamlit decision-support dashboard
 
 ## Project Structure
 
@@ -22,7 +27,13 @@ Unsupervised NLP pipeline for discovering complaint archetypes in Indian e-comme
 - `05_cluster.py` - K-Means, HDBSCAN, profiles
 - `06_anomaly.py` - Anomalies, Tier 1 critical, spikes
 - `07_visualize.py` - Static chart exports
+- `08_severity_modeling.py` - Weak labels, severity model comparison, best model select
+- `09_router_modeling.py` - Cluster-to-router supervised training + model comparison
+- `10_churn_modeling.py` - Churn risk proxy modeling + model comparison
+- `11_response_modeling.py` - Response generator comparison + quality scoring
+- `12_drift_modeling.py` - Topic drift monitoring and alerts
 - `run_pipeline.py` - One-command end-to-end run
+- `ml_utils.py` - Shared benchmarking utilities + selected model registry
 - `app.py` - Streamlit dashboard
 
 ## Setup
@@ -51,6 +62,20 @@ python run_pipeline.py
 ```bash
 streamlit run app.py
 ```
+
+## Extension Outputs
+
+- `reports/metrics_severity.csv`
+- `reports/metrics_router.csv`
+- `reports/metrics_churn.csv`
+- `reports/metrics_response.csv`
+- `reports/metrics_drift.csv`
+- `models/selected_models.json`
+- `data/final_reviews_scored.csv`
+- `data/final_reviews_routed.csv`
+- `data/final_reviews_churn.csv`
+- `data/final_reviews_response.csv`
+- `data/topic_drift_report.csv`
 
 ## GitHub Repository Creation
 
