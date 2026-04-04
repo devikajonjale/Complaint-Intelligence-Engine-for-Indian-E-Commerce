@@ -1,13 +1,15 @@
-"""Module 12: Topic drift detection from weekly embeddings and distributions."""
+"""Module 12: Topic drift with extended summary metrics and timeline chart."""
 
 from __future__ import annotations
 
 import numpy as np
 import pandas as pd
 
-from ml_utils import DATA_DIR, REPORTS_DIR, ensure_dirs, update_selected_model
+from ml_evaluation_plots import save_lineplot_drift
+from ml_utils import DATA_DIR, ML_FIGURES_DIR, REPORTS_DIR, ensure_dirs, update_selected_model
 
 import warnings
+
 warnings.filterwarnings("ignore")
 
 
@@ -56,20 +58,64 @@ def main() -> None:
         drift["js_z"] = (drift["js_divergence"] - drift["js_divergence"].mean()) / (drift["js_divergence"].std() + 1e-9)
         drift["is_drift_alert"] = (drift["shift_z"] > 1.5) | (drift["js_z"] > 1.5)
     else:
-        drift["is_drift_alert"] = []
+        drift = pd.DataFrame(
+            columns=["week", "prev_week", "centroid_shift", "js_divergence", "shift_z", "js_z", "is_drift_alert"]
+        )
 
     drift.to_csv(DATA_DIR / "topic_drift_report.csv", index=False, encoding="utf-8-sig")
-    summary = pd.DataFrame(
-        [
-            {
-                "weeks_evaluated": int(len(drift)),
-                "drift_alert_weeks": int(drift["is_drift_alert"].sum()) if len(drift) else 0,
-                "alert_rate": float(drift["is_drift_alert"].mean()) if len(drift) else 0.0,
-            }
-        ]
+
+    if len(drift):
+        save_lineplot_drift(
+            drift,
+            ML_FIGURES_DIR / "drift_centroid_js_timeline.png",
+            "Weekly drift — SBERT centroid shift and topic JS divergence",
+        )
+
+    alert_n = int(drift["is_drift_alert"].sum()) if len(drift) else 0
+    alert_rate = float(drift["is_drift_alert"].mean()) if len(drift) else 0.0
+    summary_rows = [
+        {"metric": "weeks_evaluated", "value": float(len(drift)), "kind": "count"},
+        {"metric": "drift_alert_weeks", "value": float(alert_n), "kind": "count"},
+        {"metric": "alert_rate", "value": alert_rate, "kind": "rate"},
+        {
+            "metric": "mean_centroid_shift",
+            "value": float(drift["centroid_shift"].mean()) if len(drift) else np.nan,
+            "kind": "numeric",
+        },
+        {
+            "metric": "std_centroid_shift",
+            "value": float(drift["centroid_shift"].std()) if len(drift) else np.nan,
+            "kind": "numeric",
+        },
+        {
+            "metric": "mean_js_divergence",
+            "value": float(drift["js_divergence"].mean()) if len(drift) else np.nan,
+            "kind": "numeric",
+        },
+        {
+            "metric": "max_js_divergence",
+            "value": float(drift["js_divergence"].max()) if len(drift) else np.nan,
+            "kind": "numeric",
+        },
+        {
+            "metric": "max_shift_z",
+            "value": float(drift["shift_z"].max()) if len(drift) and "shift_z" in drift.columns else np.nan,
+            "kind": "numeric",
+        },
+        {
+            "metric": "max_js_z",
+            "value": float(drift["js_z"].max()) if len(drift) and "js_z" in drift.columns else np.nan,
+            "kind": "numeric",
+        },
+    ]
+    pd.DataFrame(summary_rows).to_csv(REPORTS_DIR / "metrics_drift.csv", index=False, encoding="utf-8-sig")
+
+    update_selected_model(
+        "drift",
+        "weekly_centroid_plus_js",
+        alert_rate,
+        {"metrics_file": "reports/metrics_drift.csv"},
     )
-    summary.to_csv(REPORTS_DIR / "metrics_drift.csv", index=False, encoding="utf-8-sig")
-    update_selected_model("drift", "weekly_centroid_plus_js", float(summary.iloc[0]["alert_rate"]), {"metrics_file": "reports/metrics_drift.csv"})
     print("Drift module complete.")
 
 

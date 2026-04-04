@@ -1,25 +1,37 @@
-"""Module 10: Churn risk modeling with candidate comparison."""
+"""Module 10: Churn risk with extended binary metrics, CV, PR curve, and charts."""
 
 from __future__ import annotations
 
 import joblib
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+from sklearn.base import clone
+from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-from ml_utils import DATA_DIR, MODELS_DIR, REPORTS_DIR, binary_metrics, ensure_dirs, measure_latency_ms, update_selected_model
+from ml_evaluation_plots import save_binary_metrics_bars, save_pr_curve_plot
+from ml_utils import (
+    DATA_DIR,
+    ML_FIGURES_DIR,
+    MODELS_DIR,
+    REPORTS_DIR,
+    binary_metrics,
+    cross_val_mean_std_binary,
+    ensure_dirs,
+    measure_latency_ms,
+    update_selected_model,
+)
 
 import warnings
+
 warnings.filterwarnings("ignore")
 
 
 def build_proxy_label(df: pd.DataFrame) -> pd.Series:
-    # Proxy churn risk when explicit user identifiers are unavailable.
     return (
         (df["star_bucket"].astype(str) == "complaint")
         & (
@@ -62,32 +74,55 @@ def main() -> None:
         "svc_rbf": Pipeline(
             [("scaler", StandardScaler()), ("clf", SVC(probability=True, class_weight="balanced", random_state=42))]
         ),
+        "adaboost": AdaBoostClassifier(random_state=42, n_estimators=150, learning_rate=0.8),
     }
 
     rows = []
     best_name = None
     best_score = -1.0
     best_model = None
+    best_y_score = None
     for name, model in models.items():
-        model.fit(x_train, y_train)
-        y_score = model.predict_proba(x_test)[:, 1]
+        mdl = clone(model)
+        mdl.fit(x_train, y_train)
+        y_score = mdl.predict_proba(x_test)[:, 1]
         y_pred = (y_score >= 0.5).astype(int)
         m = binary_metrics(y_test, y_pred, y_score)
-        m["latency_ms"] = measure_latency_ms(model.predict, x_test.iloc[:1].values, repeats=100)
+        m["latency_ms"] = measure_latency_ms(mdl.predict, x_test.iloc[:1].values, repeats=80)
         m["model"] = name
+        cv_stats = cross_val_mean_std_binary(clone(model), x_train.values, y_train, cv=3)
+        m.update(cv_stats)
         rows.append(m)
         if m["pr_auc"] > best_score:
             best_score = m["pr_auc"]
             best_name = name
-            best_model = model
+            best_model = mdl
+            best_y_score = y_score
 
     metrics = pd.DataFrame(rows).sort_values("pr_auc", ascending=False)
     metrics.to_csv(REPORTS_DIR / "metrics_churn.csv", index=False, encoding="utf-8-sig")
+
+    save_binary_metrics_bars(
+        metrics,
+        ML_FIGURES_DIR / "churn_model_comparison.png",
+        "Churn proxy — precision, recall, AUC, and calibration-related scores",
+    )
+
+    if best_y_score is not None:
+        save_pr_curve_plot(
+            y_test,
+            best_y_score,
+            ML_FIGURES_DIR / "churn_pr_curve_best_model.png",
+            f"Precision–recall curve (holdout) — {best_name}",
+        )
+
     joblib.dump(best_model, MODELS_DIR / "churn_model.pkl")
 
     out = df.copy()
     out["churn_risk_score"] = best_model.predict_proba(x)[:, 1]
-    out["churn_risk_label"] = np.where(out["churn_risk_score"] >= 0.7, "High", np.where(out["churn_risk_score"] >= 0.4, "Medium", "Low"))
+    out["churn_risk_label"] = np.where(
+        out["churn_risk_score"] >= 0.7, "High", np.where(out["churn_risk_score"] >= 0.4, "Medium", "Low")
+    )
     out.to_csv(DATA_DIR / "final_reviews_churn.csv", index=False, encoding="utf-8-sig")
 
     update_selected_model("churn", best_name or "unknown", best_score, {"metrics_file": "reports/metrics_churn.csv"})

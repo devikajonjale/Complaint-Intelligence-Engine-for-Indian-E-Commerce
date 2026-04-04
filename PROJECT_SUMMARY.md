@@ -1,281 +1,457 @@
 # Complaint Intelligence Engine — Comprehensive Project Summary
 
-This document consolidates the project’s objectives, data, methodology, architecture, technology stack, Streamlit application usage, limitations (including evaluation caveats), mitigations, future scope, audience, and conclusions. It is grounded in the repository (`README.md`, `PROJECT_REPORT.md`, pipeline scripts, `app.py`, `ml_utils.py`, and report artifacts).
+This document is the **authoritative project overview**: objectives, **data**, **architecture**, **hypotheses**, **statistical and evaluation methodology**, **ML models and metrics**, **illustrative results** (from a completed pipeline run; your numbers will vary after `python run_pipeline.py`), limitations, and conclusions. It aligns with the repository (`README.md`, `PROJECT_REPORT.md`, pipeline scripts `01`–`12`, `run_pipeline.py`, `ml_utils.py`, `ml_evaluation_plots.py`, `07_visualize.py`, `app.py`, and `reports/`).
 
 ---
 
-## 1. Abstract / Objective
+## 1. Abstract and objectives
 
-The **Complaint Intelligence Engine** is an end-to-end analytics and ML pipeline for **Indian e-commerce complaints** scraped from **Google Play** (and optionally **Reddit**). It turns raw reviews into **clusters, risk signals, supervised scores (severity, routing, churn), response drafts, and topic-drift monitoring**, and exposes everything in a **10-module Streamlit** decision-support application.
+The **Complaint Intelligence Engine** is an end-to-end pipeline and **Streamlit** dashboard for **Indian e-commerce complaints** (primarily **Google Play** reviews; optional **Reddit**). It:
 
-**Objective:** Give operations and customer-experience teams a **repeatable workflow** from data ingestion to **prioritisation, routing, retention risk, and emerging-issue detection**—with multilingual (including **Hinglish**) text handled via embeddings and preprocessing.
+- Ingests and cleans **multilingual** text (including **Hinglish**).
+- Builds **TF-IDF** and **multilingual Sentence-BERT** representations.
+- Discovers **themes** (clustering), **anomalies**, and **weekly volume spikes**.
+- Trains and compares **supervised** models for **severity**, **routing**, **churn risk**, **response templates**, and **topic drift** summaries.
+- Exports **tables**, **static figures** (`figures/viz_*.png`), and **ML benchmark plots** (`reports/ml_figures/`).
 
----
-
-## 2. Problem Statement / Definition
-
-E-commerce apps receive **high volume, noisy, multilingual** reviews. Manual triage does not scale; teams need:
-
-| Challenge | What the project addresses |
-|-----------|----------------------------|
-| Volume and noise | Automated cleaning, deduplication, TF-IDF + embeddings |
-| Mixed English / Hinglish | `langdetect`, multilingual Sentence-BERT |
-| Unknown issue themes | Unsupervised clustering (K-Means, HDBSCAN) |
-| Rare / extreme cases | Isolation Forest + HDBSCAN noise → Tier 1 alerts |
-| Sudden incidents | Weekly spike detection (rolling z-score) |
-| Operational actions | Severity, routing, churn proxy, templates + quality metrics, drift |
-
-**Definition of success (engineering):** One command (`python run_pipeline.py`) produces `data/`, `models/`, `reports/`, and a dashboard that loads the richest available CSV (`final_reviews_response.csv` → … → `final_reviews.csv`).
+**Primary objective:** Support **operations and CX** with a repeatable workflow—**prioritisation**, **team routing**, **retention risk surfacing**, and **early detection of shifting complaint topics**—without requiring manual reading of entire review streams.
 
 ---
 
-## 3. Dataset Description
+## 2. Problem statement
 
-### 3.1 Sources
+| Challenge | Project response |
+|-----------|------------------|
+| High volume, noisy text | Cleaning, deduplication, structured features |
+| English / Hinglish mix | `langdetect`, multilingual embeddings |
+| Unknown issue taxonomy | Unsupervised **K-Means** + **HDBSCAN** on UMAP space |
+| Rare / severe incidents | **Isolation Forest** + HDBSCAN noise → **Tier 1** |
+| Sudden operational stress | **Rolling z-score** on weekly counts per platform × cluster |
+| Action routing | Supervised **router** (TF-IDF + linear / ensemble models) |
+| Escalation priority | **Severity** models on weak labels + dense features |
+| Churn signalling | **Binary** models on a **proxy** “at-risk” label |
+| Response drafting | Compared **template generators** + heuristic **quality** scores |
+| Emerging topics | **Centroid shift** + **Jensen–Shannon** divergence week-on-week |
 
-- **Google Play:** Myntra, Meesho, Nykaa, Flipkart, Amazon India (`01_ingest.py`): up to **500 reviews per app per language**, `en` + `hi`, country `in`, newest first.
-- **Reddit (optional):** PRAW, subreddits such as `IndianShopping`, `Meesho`, `india`, keyword-filtered posts — requires `.env` credentials (`REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET`).
+**Engineering success criterion:** `python run_pipeline.py` completes and materialises `data/`, `models/`, `reports/`, `figures/`, and `reports/ml_figures/` for the dashboard.
 
-### 3.2 Reported Run (from `PROJECT_REPORT.md`)
+---
 
-| Stage | Count / detail |
-|--------|----------------|
-| Google Play fetched | 4,768 |
+## 3. Data: sources, schema, and scale
+
+### 3.1 Sources and ingestion parameters
+
+| Source | Mechanism | Configuration (code) |
+|--------|-----------|-------------------------|
+| **Google Play** | `google-play-scraper` | Apps: Myntra, Meesho, Nykaa, Flipkart, Amazon India; `en` + `hi`; `country=in`; up to **500** reviews per app per language; newest first (`01_ingest.py`) |
+| **Reddit** | `praw` + `python-dotenv` | Subreddits e.g. `IndianShopping`, `Meesho`, `india`; keyword filter; limit **200**; requires `.env` credentials |
+
+### 3.2 Documented run (`PROJECT_REPORT.md`)
+
+These figures are **example** counts from one execution; live runs differ.
+
+| Stage | Value |
+|-------|--------|
+| Play Store rows fetched | 4,768 |
 | Reddit | Failed (401) without credentials |
 | After merge + clean | 2,389 |
 | After preprocess + dedup | 2,253 |
-| Hinglish share | 196 (~8.7%) |
-| TF-IDF shape | 2,253 × 2,642 |
-| Embeddings | (2,253, 384), model `paraphrase-multilingual-MiniLM-L12-v2` |
+| Hinglish-flagged reviews | 196 (~8.7%) |
+| TF-IDF matrix | 2,253 × 2,642 |
+| Embedding tensor | (2,253, 384); model `paraphrase-multilingual-MiniLM-L12-v2` |
+| PCA(50) cumulative explained variance | ~0.80 |
+| Chosen K-Means **k** | Data-driven (max **silhouette** on UMAP-10); reported example **k = 4** |
+| K-Means vs HDBSCAN **ARI** | Example **0.6748** |
 
-### 3.3 Artifacts
+### 3.3 Key derived fields (non-exhaustive)
 
-`data/raw_reviews.csv` → `cleaned_reviews.csv` → embeddings, reductions, `clustered_reviews.csv`, `final_reviews.csv`, plus extension outputs (`final_reviews_scored.csv`, `final_reviews_routed.csv`, `final_reviews_churn.csv`, `final_reviews_response.csv`, `topic_drift_report.csv`, etc.).
+| Category | Fields (typical) |
+|----------|------------------|
+| Identity / context | `platform`, `source`, `lang`, `at`, `score`, `thumbs_up`, `content`, `review_length` |
+| Text NLP | `cleaned_content`, `text_for_model`, `is_hinglish`, TF-IDF sparse matrix + vocab |
+| Geometry | `embeddings.npy`, `pca_50`, `umap_10`, `tsne_2d`, `umap_1`…`umap_10` in tabular exports |
+| Clustering | `kmeans_cluster`, `cluster_name`, `hdbscan_cluster`, `hdbscan_is_noise` |
+| Anomaly / ops | `isolation_score`, `isolation_anomaly`, `ocsvm_score`, `tier1_critical`, `severity` |
+| Supervised | `severity_label_ml`, `severity_score_ml`, `route_category`, `route_confidence`, `churn_risk_score`, `suggested_response`, `response_quality_score` |
+| Drift | `topic_drift_report.csv`: `centroid_shift`, `js_divergence`, `shift_z`, `js_z`, `is_drift_alert` |
 
----
-
-## 4. Methodology and Module Explanation
-
-**Orchestration:** `run_pipeline.py` runs scripts **01 → 12** in order.
-
-| Step | Script | Role |
-|------|--------|------|
-| 01 | `01_ingest.py` | Play Store + Reddit merge → `raw_reviews.csv` |
-| 02 | `02_preprocess.py` | Cleaning, features, TF-IDF |
-| 03 | `03_embed.py` | Sentence-BERT embeddings |
-| 04 | `04_reduce.py` | PCA, UMAP, t-SNE |
-| 05 | `05_cluster.py` | K-Means, HDBSCAN, profiles, k selection |
-| 06 | `06_anomaly.py` | Isolation Forest, One-Class SVM, Tier 1, spikes |
-| 07 | `07_visualize.py` | Static chart exports |
-| 08 | `08_severity_modeling.py` | Weak + gold-style labels, tabular + embedding features, model compare → `severity_model.pkl`, `final_reviews_scored.csv` |
-| 09 | `09_router_modeling.py` | Supervised routing vs clusters → `router_model.pkl`, routed CSV |
-| 10 | `10_churn_modeling.py` | Churn proxy, model comparison |
-| 11 | `11_response_modeling.py` | Response generator comparison, quality scores |
-| 12 | `12_drift_modeling.py` | Weekly topic drift (centroid + JSD-style signals) |
-
-**Shared logic:** `ml_utils.py` — directories, `update_selected_model`, latency timing, `multiclass_metrics` / `binary_metrics`.
-
-**Selection policy (documented in `reports/model_selection_summary.md`):** severity — weighted F1 (calibration tracked); router — macro F1; churn — PR-AUC; auto-response — average response quality score; drift — weekly centroid + distribution divergence alert framework.
-
----
-
-## 5. Architecture Workflow (Diagrams)
-
-### 5.1 End-to-End Pipeline
-
-```mermaid
-flowchart TB
-  subgraph ingest["Data acquisition"]
-    GP[Google Play Scraper]
-    RD[Reddit PRAW]
-  end
-
-  subgraph core["Core NLP / unsupervised"]
-    P01[01 Ingest]
-    P02[02 Preprocess]
-    P03[03 Embed SBERT]
-    P04[04 Reduce PCA UMAP t-SNE]
-    P05[05 Cluster K-Means HDBSCAN]
-    P06[06 Anomaly + Spikes]
-    P07[07 Visualize]
-  end
-
-  subgraph sup["Supervised extensions"]
-    M08[08 Severity]
-    M09[09 Router]
-    M10[10 Churn]
-    M11[11 Response]
-    M12[12 Drift]
-  end
-
-  GP --> P01
-  RD --> P01
-  P01 --> P02 --> P03 --> P04 --> P05 --> P06 --> P07
-  P06 --> FR[final_reviews.csv]
-  FR --> M08 & M09 & M10 & M11 & M12
-  M08 --> REG[selected_models.json]
-  M09 --> REG
-  M10 --> REG
-  M11 --> REG
-  M12 --> REG
-  REG --> APP[Streamlit app.py]
-  FR --> APP
-```
-
-### 5.2 Dashboard Data Flow
+### 3.4 Data lineage (artefact chain)
 
 ```mermaid
 flowchart LR
-  CSV["Enriched CSV chain"]
-  CSV --> LOAD[load_data: pick richest existing file]
-  LOAD --> FILT[Sidebar: platform, stars, dates]
-  FILT --> PAGES[10 modules: KPIs, charts, tables, predictors]
-  REFRESH[Refresh Full Pipeline] --> RUN[run_pipeline.py]
-  RUN --> CSV
+  A[raw_reviews.csv] --> B[cleaned_reviews.csv]
+  B --> C[embeddings.npy]
+  B --> D[tfidf_matrix.npz]
+  C --> E[pca / umap / tsne]
+  E --> F[clustered_reviews.csv]
+  F --> G[final_reviews.csv]
+  G --> H[final_reviews_scored.csv]
+  H --> I[final_reviews_routed.csv]
+  I --> J[final_reviews_churn.csv]
+  J --> K[final_reviews_response.csv]
+  K --> L[topic_drift_report.csv]
+  L --> M[07_visualize.py]
+  K --> M
 ```
 
 ---
 
-## 6. Technologies Used — Where, How, and Why
+## 4. Architecture and pipeline order
 
-| Technology | Where used | Why |
-|------------|------------|-----|
-| **Python 3.x** | Entire repository | ML, data processing, UI |
-| **google-play-scraper** | `01_ingest.py` | Live Play Store reviews |
-| **praw**, **python-dotenv** | `01_ingest.py` | Reddit API + environment secrets |
-| **pandas**, **numpy**, **scipy** | All stages | Tabular data, numerics, statistics |
-| **langdetect** | Preprocess | Language detection / Hinglish awareness |
-| **sentence-transformers**, **torch** | `03_embed.py` | Multilingual semantic vectors |
-| **scikit-learn** | Preprocess, reduction, clustering-related steps, supervised models | Standard ML algorithms and metrics |
-| **umap-learn**, **hdbscan** | `04_reduce.py`, `05_cluster.py` | Manifold learning, density-based clustering |
-| **plotly** | `app.py`, `07_visualize.py` | Interactive charts in the dashboard |
-| **matplotlib**, **seaborn** | `07_visualize.py` | Static figure exports |
-| **streamlit** | `app.py` | Decision-support dashboard, filters, pipeline trigger |
-| **joblib** | Model persistence | `*.pkl` artifacts |
-| **python-docx** | Listed in `requirements.txt` | Document/report generation (if used by project scripts) |
+**Important:** `run_pipeline.py` runs **`07_visualize.py` after `12_drift_modeling.py`** so figures can use the **richest** CSV (`final_reviews_response.csv` when present).
 
----
+```mermaid
+flowchart TB
+  subgraph ingest["Acquisition"]
+    GP[Google Play]
+    RD[Reddit PRAW]
+  end
 
-## 7. Streamlit App: Deployment, Navigation, and Complete Example
+  subgraph core["Core pipeline"]
+    S01[01 Ingest]
+    S02[02 Preprocess]
+    S03[03 SBERT embed]
+    S04[04 PCA / UMAP / t-SNE]
+    S05[05 K-Means + HDBSCAN]
+    S06[06 Anomaly + spikes]
+  end
 
-### 7.1 Deployment / Demo
+  subgraph ml["Supervised extensions"]
+    S08[08 Severity]
+    S09[09 Router]
+    S10[10 Churn]
+    S11[11 Response templates]
+    S12[12 Drift]
+  end
 
-1. **Environment:** `python -m venv .venv`, activate the virtual environment, then `pip install -r requirements.txt`.
-2. **Generate data:** `python run_pipeline.py` (first run can take several minutes on CPU due to embedding computation).
-3. **Launch UI:** `streamlit run app.py`  
-   (Validation run documented in `PROJECT_REPORT.md`: `streamlit run app.py --server.headless true --server.port 8501`.)
+  S07[07 Visualize — 10 charts]
 
-**Optional hosting:** The app can be deployed on **Streamlit Community Cloud** (or similar) by connecting the repository and configuring secrets for Reddit if multi-source ingestion is required.
+  GP --> S01
+  RD --> S01
+  S01 --> S02 --> S03 --> S04 --> S05 --> S06
+  S06 --> S08 --> S09 --> S10 --> S11 --> S12 --> S07
+  S06 --> REG[models/selected_models.json]
+  S08 --> REG
+  S09 --> REG
+  S10 --> REG
+  S11 --> REG
+  S12 --> REG
+  REG --> APP[Streamlit app.py]
+```
 
-### 7.2 Interface Navigation (Sidebar)
+### 4.1 Dashboard data flow
 
-| Module | Purpose |
-|--------|---------|
-| **How to Use This App** | Onboarding, per-module expanders, end-to-end worked example |
-| **Live Pulse** | KPI cards + complaint volume by platform and cluster |
-| **Complaint Landscape** | t-SNE scatter plot of review embeddings |
-| **Spike Tracker** | Weekly complaint trends with spike markers |
-| **Critical Alerts** | Tier 1 anomalous complaints table |
-| **Severity Triage** | Threshold slider, ranked table, heuristic “SHAP-style” driver bars |
-| **Complaint Router** | Paste text → predicted route + term influence; routing load histogram |
-| **Churn Risk** | Distribution histogram + top-risk watchlist |
-| **Auto-Responder** | Template response variants with quality scores |
-| **Drift Monitor** | Centroid shift and JS divergence over time |
-
-**Global controls:** Platform multiselect, star bucket, date range; **Refresh Full Pipeline** executes `run_pipeline.py` and clears Streamlit cached data.
-
-### 7.3 Complete Example (Monday Morning Operations Review)
-
-As documented in the app’s **How to Use This App** section, a customer-experience analyst can run a **~15-minute** review:
-
-1. Open **Live Pulse** — check KPIs; note Tier 1 alert count and dominant cluster.
-2. Open **Spike Tracker** — identify platforms/clusters with statistical spikes (e.g. delivery line spike).
-3. Open **Critical Alerts** — filter by platform; read top escalations for recurring sub-themes (e.g. refund not credited).
-4. Open **Complaint Router** — paste a representative review; confirm whether root cause aligns with logistics vs payments.
-5. Open **Churn Risk** — filter high-risk slice by platform and route to quantify retention exposure.
-6. Open **Auto-Responder** — generate a draft response for a top case; edit to match brand voice and SLA.
-7. Open **Drift Monitor** — check whether new vocabulary or drift alerts indicate an emerging issue class.
-
-**Outcome:** Incident scoped, team assignment clarified, churn-at-risk subset identified, draft response prepared, and topic shift validated—all within one session.
+```mermaid
+flowchart LR
+  R[run_pipeline.py] --> D[data + reports + figures]
+  D --> L[load_data: richest CSV]
+  L --> F[Sidebar filters]
+  F --> P[11 Streamlit modules]
+```
 
 ---
 
-## 8. Project Limitations (Including Perfect Evaluation Scores)
+## 5. Research and operational hypotheses
 
-| Limitation | Detail |
-|------------|--------|
-| **Near-perfect / perfect metrics** | Files such as `reports/metrics_severity.csv` show **weighted/macro F1 = 1.0** for several models; churn metrics can also reach **1.0**. Common causes: **weak labels highly correlated with input features** (e.g. severity uses regex/legal flags in both **label rules** and **feature columns**, i.e. **effective leakage**), **limited sample size**, and **random train/test splits on one corpus** that do not test **time** or **platform** generalisation. |
-| **Registry vs UI copy** | `models/selected_models.json` may select **logreg** for severity while in-app explanatory text references **XGBoost** or **DistilBERT**-style comparisons that do not match `08_severity_modeling.py` (which trains Logistic Regression, Random Forest, Gradient Boosting, and calibrated LinearSVC). |
-| **Reddit ingestion** | Without valid Reddit credentials in `.env`, ingestion relies on Google Play only (e.g. 401 on Reddit in documented runs). |
-| **One-Class SVM** | `PROJECT_REPORT.md` notes **insufficient positive rows** for robust fitting; warnings and fallbacks may apply. |
-| **Windows / Hugging Face cache** | Possible symlink warnings; intermittent package install file locks on Windows. |
-| **Auto-Responder in UI** | `app.py` uses **fixed templates** and a **simple quality score heuristic**; full `11_response_modeling.py` output in `metrics_response.csv` compares **template variants**, not a live LLM in the Streamlit UI. |
-| **Drift module** | Meaningful output requires **enough weekly history**; sparse or short windows yield empty or weak drift reports. |
-| **Testing / CI** | `PROJECT_REPORT.md` recommends automated tests and CI; they are not part of the baseline repository. |
-| **Gold evaluation** | Code may reserve a small **gold_eval** slice; this is not a full human-annotated benchmark. |
+The codebase does **not** register formal null hypotheses or *p*-values everywhere; it **operationalises questions** below. Where a **threshold** or **metric** is used, the summary states whether it is a **classical test**, a **heuristic rule**, or a **model-evaluation metric**.
 
----
-
-## 9. Mitigations
-
-| Issue | Mitigation |
-|-------|------------|
-| Inflated metrics | Use **time-based and platform-based holdouts**; collect **human labels** for severity and routing; **remove or strictly separate** rule-derived features from weak-label rules; report **calibration**, **per-class recall**, and **error analysis**. |
-| Weak supervision | **Active learning**, **noise-aware** or **robust** training, **abstention** or **human review** queues for low-confidence predictions. |
-| UI vs pipeline mismatch | Drive help text from **`selected_models.json`** and generated **`metrics_*.csv`**; single source of truth in documentation. |
-| Reddit reliability | Provide credentials for production; **cache** or **snapshot** datasets for reproducible demos and CI. |
-| Auto-responses | Optional **LLM API** behind a feature flag; mandatory **human approval** before send; log edits as feedback. |
-| Operational readiness | Add **CI**, **pinned dependencies**, and a **frozen sample dataset** for offline runs. |
+| ID | Hypothesis (plain language) | How the project addresses it | Nature of evidence |
+|----|----------------------------|------------------------------|--------------------|
+| **H1** | Complaints form **separable themes** in a low-dimensional manifold of embeddings. | K-Means on UMAP-10; **silhouette score** maximised over **k ∈ [3,12]** (`k_selection.csv`). | **Internal cluster validity** (descriptive optimisation), not a significance test. |
+| **H2** | Density-based clustering **agrees partly** with partition-based clustering on the same space. | **Adjusted Rand Index (ARI)** between K-Means and HDBSCAN labels. | **Agreement index** [−1,1]; descriptive comparison. |
+| **H3** | A small fraction of reviews are **multivariate outliers** in UMAP feature space. | **Isolation Forest** (`contamination=0.05`); top fraction flagged by decision function. | **Unsupervised anomaly scoring**; threshold set by algorithm hyperparameter, not *p*-value. |
+| **H4** | **Tier-1** cases are those that are both **isolation outliers** and **HDBSCAN noise**. | `tier1_critical = isolation_anomaly & hdbscan_is_noise`. | **Rule composition** of two detectors. |
+| **H5** | For some apps, **“positive experience”** reviews occupy a region usable as **One-Class SVM** reference. | OCSVM trained on rows with `cluster_name` containing `"Positive"` if **≥ 20** rows; else fallback defaults. | **One-class learning**; not a two-sample hypothesis test. |
+| **H6** | Weekly complaint counts, **conditional** on platform and cluster, sometimes **exceed typical short-run variation**. | Rolling mean/std over **4 weeks** (min_periods 2); **z-score**; `is_spike = (z_score > 2.5)`. | **Standardised deviation from rolling mean**; interpret as **alert rule** (approximate normal tail if counts were Gaussian—**assumption not verified** in code). |
+| **H7** | **Week-to-week** changes in embedding centroids and topic mixes are **unusually large** on some weeks. | L2 shift between consecutive weekly SBERT centroids; **Jensen–Shannon** divergence on topic proportion vectors; **z-scores** of `centroid_shift` and `js_divergence` across weeks; alert if **shift_z > 1.5** or **js_z > 1.5**. | **Standardisation vs time-series of weekly metrics**; **empirical threshold** (not a formal multiple-testing correction). |
+| **H8** | **Weak supervision** (rule-based severity labels) supports training models that **generalise** on a held-out split. | Train/test **stratified** split; multiple classifiers; **multiclass metrics** + **3-fold CV** means/std. | **Predictive evaluation** on proxy labels; risk of **leakage** if features duplicate rules (see §10). |
+| **H9** | **Cluster names** (or routes) can be predicted from text with acceptable **macro-F1**. | Router trained on TF-IDF text → multiclass metrics; **macro-F1** selection; centroid-distance filter on training subset. | **Supervised learning metrics**; no NHST. |
+| **H10** | A **proxy binary label** captures “churn-like” distress for modelling when user IDs are weak. | Proxy from star bucket + severity / Tier-1 / thumbs / isolation flags; **PR-AUC**, **ROC-AUC**, **Brier**, etc. | **Heuristic label** + ranking metrics; not a causal churn claim. |
 
 ---
 
-## 10. Future Scope
+## 6. Statistical methods, metrics, and tests (detailed)
 
-- **Real labels and governance:** Annotation workflows, audit trails, model cards, and bias/fairness review where applicable.
-- **Production serving:** REST/queue workers, scheduled ingestion, monitoring (data drift, latency, errors).
-- **Richer generation:** External LLMs with safety and policy filters; A/B testing of responses.
-- **User-level analytics:** If compliant identifiers exist, strengthen **churn** and **repeat-complaint** modelling.
-- **Multi-channel ingestion:** Support tickets, email, social platforms beyond Play/Reddit.
-- **MLOps:** Experiment tracking, automated retraining triggered by drift alerts, shadow deployments.
+### 6.1 Unsupervised structure and clustering
+
+| Method | Role | Output / note |
+|--------|------|----------------|
+| **Silhouette score** (`sklearn.metrics.silhouette_score`) | Chooses **k** for K-Means | Higher = tighter, separated clusters in UMAP-10; **no p-value** |
+| **K-Means inertia** | Logged in `k_selection.csv` | Elbow-style descriptive |
+| **Adjusted Rand Index** | K-Means vs HDBSCAN | Chance-corrected agreement |
+| **HDBSCAN** (`min_cluster_size=30`) | Noise / density clusters | Points labelled **−1** = noise |
+
+### 6.2 Anomaly detection
+
+| Method | Parameters | Interpretation |
+|--------|------------|----------------|
+| **Isolation Forest** | `contamination=0.05`, `n_estimators=200` | Flags ~5% as anomalies in UMAP-10 space |
+| **One-Class SVM** | RBF, `nu=0.05`, trained on “positive” cluster subset if sufficient data | Deviation from “normal” subpopulation |
+
+### 6.3 Spike detection (time series per group)
+
+For each **(platform, cluster_name, week)** series:
+
+\[
+z_t = \frac{c_t - \bar{c}_{t,\text{roll}}}{s_{t,\text{roll}} + \varepsilon}
+\]
+
+where \(c_t\) is complaint count, \(\bar{c}_{t,\text{roll}}\) and \(s_{t,\text{roll}}\) are **rolling mean and std** over **4** prior weeks (`min_periods=2`). **Spike** if \(z_t > 2.5\).
+
+**Caveat:** This is a **rule-based control chart** style rule, not a formal test with controlled false-positive rate across all series.
+
+### 6.4 Drift detection (week on week)
+
+| Quantity | Definition |
+|----------|------------|
+| **Centroid shift** | \(\| \bar{e}_{w} - \bar{e}_{w-1} \|\) over SBERT embeddings \(\bar{e}\) per week |
+| **JS divergence** | Jensen–Shannon between **topic proportion** vectors \(p\) (prev week) and \(q\) (current week) over route/cluster topic labels |
+| **shift_z, js_z** | \((x - \mu) / \sigma\) across **weeks** for each signal |
+| **Alert** | `shift_z > 1.5` **or** `js_z > 1.5` |
+
+**Caveat:** Weekly **z** compares a week to the **marginal distribution of weekly values**, not to a parametric null; multiple weeks imply **multiple implicit comparisons** without **Bonferroni** / FDR in code.
+
+### 6.5 Supervised learning — evaluation metrics (`ml_utils.py`)
+
+**Multiclass (severity, router):**
+
+| Metric | Use |
+|--------|-----|
+| Accuracy, balanced accuracy | Overall / class-balanced view |
+| Weighted / macro **F1**, precision, recall | Primary policy: severity **weighted F1**; router **macro F1** |
+| Cohen’s **κ** | Agreement with weak labels beyond chance |
+| **MCC** | Single scalar correlation for multiclass |
+| **ROC-AUC OVR** (weighted), **log loss**, Brier-like | Probabilistic quality where `predict_proba` exists |
+| **3-fold stratified CV** | `f1_weighted`, `f1_macro` mean ± std on training fold |
+
+**Binary (churn proxy):**
+
+| Metric | Use |
+|--------|-----|
+| F1, precision, recall, specificity | Threshold 0.5 on predicted probability |
+| **PR-AUC**, **ROC-AUC** | Imbalance-aware ranking (**PR-AUC** primary for selection) |
+| **Brier score** | Calibration of probabilities |
+| **MCC** | Strict summary of confusion matrix |
+| **3-fold CV** | `average_precision`, `roc_auc` mean ± std |
+
+**Additional outputs:** `metrics_*_per_class.csv` (severity, router), `metrics_response_scores_long.csv`, PNG charts under `reports/ml_figures/`.
 
 ---
 
-## 11. Who Can Use This Project
+## 7. ML models by stage
 
-| User | Use case |
-|------|----------|
-| **CX / support leadership** | Queue prioritisation, routing load, weekly spike and drift briefings |
-| **Product and operations** | Thematic clusters, incident timing vs review spikes |
-| **Data / ML engineers** | Extend modules, swap models, add labelled datasets |
-| **Students and researchers** | End-to-end NLP, weak supervision, and dashboard integration patterns |
+### 7.1 Severity (`08_severity_modeling.py`)
+
+**Labels:** `severity_label_weak` from rules (legal/financial keywords, stars, thumbs); optional `gold_split` slice for future evaluation.
+
+**Features:** Tabular (length, score, thumbs, keyword flags, punctuation) **concatenated** with SBERT embeddings.
+
+| Candidate model | Notes |
+|-----------------|--------|
+| LogisticRegression | `class_weight=balanced` |
+| RandomForestClassifier | 250 trees, balanced |
+| GradientBoostingClassifier | Default-style GBM |
+| CalibratedClassifierCV(LinearSVC) | Probabilities for metrics |
+| HistGradientBoostingClassifier | Histogram-based boosting |
+| Pipeline(StandardScaler + SGDClassifier `loss=log_loss`) | Linear model on scaled dense features |
+
+**Selection:** Best **weighted F1** on stratified **20% holdout**. **Registry:** `models/selected_models.json` → `severity`.
+
+### 7.2 Router (`09_router_modeling.py`)
+
+**Target:** `cluster_name` (factorised). **Input:** `text_for_model` / `cleaned_content`. Optional training filter: embedding distance to cluster centroid ≤ **40th percentile** of distances.
+
+| Model | Vectoriser | Classifier |
+|-------|------------|------------|
+| logreg_tfidf | TF-IDF 5k, (1,2)-grams | LogisticRegression |
+| linear_svc_tfidf | Same | Calibrated LinearSVC |
+| rf_tfidf | TF-IDF 3k | RandomForest |
+| nb_tfidf | TF-IDF 6k | MultinomialNB |
+| extra_trees_tfidf | TF-IDF 4k, (1,2)-grams | ExtraTrees |
+
+**Selection:** Best **macro F1** on holdout. **Artifact:** `router_model.pkl` (pipeline + class list).
+
+### 7.3 Churn proxy (`10_churn_modeling.py`)
+
+**Label:** Binary proxy from complaint star bucket + severity / Tier-1 / thumbs / isolation.
+
+| Model | Notes |
+|-------|--------|
+| Scaled LogisticRegression | Baseline linear |
+| RandomForest | 300 trees |
+| GradientBoosting | Sklearn GBM |
+| SVC RBF | `probability=True` |
+| AdaBoost | Ensemble stumps |
+
+**Selection:** Best **PR-AUC** on holdout. **Artifact:** `churn_model.pkl`.
+
+### 7.4 Response generators (`11_response_modeling.py`)
+
+**Not** a neural generator: **four** template functions `template_v1`–`v4`; **quality_score** from overlap + empathy/action tokens − toxicity penalty. **Selection:** Highest **mean** quality on a **400-row** sample (configurable via `min(400, n)`).
+
+### 7.5 Drift summary (`12_drift_modeling.py`)
+
+No classifier: **weekly** centroid + JS + z-based **alerts**; summary rows → `metrics_drift.csv` (long format: `metric`, `value`, `kind`).
 
 ---
 
-## 12. Conclusion
+## 8. Illustrative results (one repository snapshot)
 
-The Complaint Intelligence Engine provides a **coherent, modular path** from **Indian e-commerce review data** through **multilingual embeddings, clustering, anomaly detection, spike analytics**, and **supervised extensions** for **severity, routing, churn risk, response quality, and topic drift**, surfaced in a **Streamlit** application for exploration and triage.
+> **Disclaimer:** Values below come from **current** `reports/*.csv` and `models/selected_models.json` in the repo **at documentation time**. Re-running the pipeline on new data **will change** all figures. Use these as **examples** of **schema and magnitude**, not fixed benchmarks.
 
-Its main strength is **integration and repeatability** (`run_pipeline.py` + artefact chain). **Headline metrics should be interpreted cautiously** until evaluation uses **disjoint time/platform splits** and **human-validated labels**, especially given **weak-label and feature overlap** and **near-perfect scores** observed in some `reports/metrics_*.csv` outputs. Aligning **on-copy model names** with **`models/selected_models.json`** and training code reduces confusion for stakeholders.
+### 8.1 Model registry (`selected_models.json` — example)
 
-Treat the system as **decision-support and prototyping** until production-grade labelling, monitoring, and deployment practices are added.
+| Task | Selected model | Primary metric (registry) |
+|------|----------------|---------------------------|
+| Severity | `logreg` | weighted F1 = 1.0 |
+| Router | `linear_svc_tfidf` | macro F1 ≈ 0.936 |
+| Churn | `gradient_boosting` | PR-AUC = 1.0 |
+| Response | `template_v3` | mean quality ≈ 0.590 |
+| Drift | `weekly_centroid_plus_js` | alert rate ≈ 0.148 |
+
+### 8.2 Severity — holdout + CV (excerpt, `metrics_severity.csv`)
+
+| Model | weighted_f1 | macro_f1 | accuracy | cv_f1_weighted_mean ± std |
+|-------|-------------|----------|----------|-----------------------------|
+| logreg | 1.0 | 1.0 | 1.0 | 0.999 ± 0.0008 |
+| sgd_log | 0.961 | 0.947 | 0.962 | 0.948 ± 0.003 |
+| random_forest | 0.951 | 0.767 | 0.955 | 0.942 ± 0.015 |
+
+*Interpretation caution:* Perfect scores for several models strongly suggest **weak-label / feature alignment** or **easy split**; see §10.
+
+### 8.3 Router (excerpt, `metrics_router.csv`)
+
+| Model | macro_f1 | weighted_f1 | accuracy | cv_macro_f1_mean ± std |
+|-------|----------|-------------|----------|-------------------------|
+| linear_svc_tfidf | 0.936 | 0.938 | 0.939 | 0.933 ± 0.023 |
+| logreg_tfidf | 0.928 | 0.927 | 0.927 | 0.915 ± 0.015 |
+| nb_tfidf | 0.565 | 0.743 | 0.777 | 0.597 ± 0.011 |
+
+### 8.4 Churn proxy (excerpt, `metrics_churn.csv`)
+
+| Model | pr_auc | roc_auc | f1 | cv_pr_auc_mean ± std |
+|-------|--------|---------|-----|----------------------|
+| gradient_boosting | 1.0 | 1.0 | 1.0 | 0.997 ± 0.002 |
+| svc_rbf | 0.986 | 0.999 | 0.889 | 0.967 ± 0.012 |
+| logreg | 0.927 | 0.996 | 0.774 | 0.921 ± 0.013 |
+
+### 8.5 Response templates (`metrics_response.csv` — example)
+
+| Generator | n_samples | avg_quality | std | p90 |
+|-----------|-----------|-------------|-----|-----|
+| template_v3 | 400 | 0.590 | 0.058 | 0.686 |
+| template_v2 | 400 | 0.589 | 0.061 | 0.700 |
+| template_v1 | 400 | 0.589 | 0.056 | 0.673 |
+| template_v4 | 400 | 0.089 | 0.126 | 0.329 |
+
+*Note:* `template_v4` underperforms on the **current** heuristic—useful as a **sanity check** that scoring differentiates variants.
+
+### 8.6 Drift summary (`metrics_drift.csv` — example)
+
+| metric | value |
+|--------|-------|
+| weeks_evaluated | 27 |
+| drift_alert_weeks | 4 |
+| alert_rate | 0.148 |
+| mean_centroid_shift | 0.317 |
+| mean_js_divergence | 0.054 |
+| max_js_divergence | 0.203 |
+
+### 8.7 Hypothesis-linked outcomes (concise)
+
+| Hypothesis | Example quantitative outcome | Caveat |
+|------------|------------------------------|--------|
+| H1 (themes) | Silhouette-driven **k** stored in `k_selection.csv` | Internal metric only |
+| H2 (ARI) | Example ARI **0.67** (`PROJECT_REPORT.md`) | One run |
+| H6 (spikes) | Weeks with **z > 2.5** flagged in `spike_report.csv` | Not FDR-controlled |
+| H7 (drift) | Example **4 / 27** weeks alerted | Thresholds empirical |
+| H8–H10 (ML) | Tables above | Labels proxy / leaky features possible |
 
 ---
 
-## 13. Repository Map (Quick Reference)
+## 9. Visualisations and reporting
+
+| Output | Description |
+|--------|-------------|
+| `figures/viz_01_*.png` … `viz_10_*.png` | **Ten distinct** seaborn **darkgrid** charts (numeric + categorical mixes): heatmaps, bars with CI, KDE by group, UMAP scatter, box/violin, stacked %, drift or spike fallback, etc. |
+| `reports/ml_figures/*.png` | Model comparison bars, confusion matrices, PR curve (churn), drift timeline, response generator bar/boxplots |
+| Streamlit | **Pipeline & ML figures** gallery + per-module **Plotly** bars from metrics CSVs |
+
+---
+
+## 10. Limitations (including inflated ML scores)
+
+| Issue | Detail |
+|-------|--------|
+| **Weak labels + features** | Severity uses **rules** for labels **and** overlapping **tabular features** → risk of **near-perfect holdout** metrics (**not** proof of human-level performance). |
+| **Single-corpus random split** | Does not stress-test **temporal** or **platform** shift. |
+| **Churn proxy** | Not observed churn; **PR-AUC** reflects the **proxy**, not true attrition. |
+| **Spike / drift z-rules** | **Not** multiple-testing adjusted; Gaussian assumption for counts **unstated**. |
+| **OCSVM** | May **degrade** if “positive” cluster is too small (fallback path). |
+| **Reddit** | Optional; often absent without credentials. |
+
+**Mitigations:** Time-based validation; human labels; remove rule features from severity inputs; calibration plots; per-class error analysis; frozen evaluation sets.
+
+---
+
+## 11. Technology stack (condensed)
+
+| Layer | Technologies |
+|-------|----------------|
+| Ingestion | `google-play-scraper`, `praw`, `python-dotenv` |
+| Tables / numerics | `pandas`, `numpy`, `scipy` |
+| NLP | `langdetect`, `sentence-transformers`, `torch` |
+| ML | `scikit-learn`, `umap-learn`, `hdbscan` |
+| Viz | `matplotlib`, `seaborn`, `plotly` |
+| App | `streamlit`, `joblib` |
+
+---
+
+## 12. Streamlit modules (sidebar)
+
+| Module | Role |
+|--------|------|
+| How to Use This App | Guided tour |
+| Live Pulse | KPIs + volume by cluster |
+| Complaint Landscape | t-SNE map |
+| Spike Tracker | Weekly lines + spike markers |
+| Critical Alerts | Tier 1 table |
+| Severity Triage | Scores + metrics/charts |
+| Complaint Router | Predict + load histogram + metrics/charts |
+| Churn Risk | Histogram + watchlist + metrics/charts |
+| Auto-Responder | Live templates + pipeline metrics/charts |
+| Drift Monitor | Plotly lines + drift table + summary metrics/charts |
+| Pipeline & ML figures | Full gallery of `viz_*` and `ml_figures` |
+
+---
+
+## 13. Future scope and audience
+
+**Future:** Human annotation, time-split benchmarks, production APIs, LLM responses with guardrails, MLOps, multi-channel ingest.
+
+**Audience:** CX leads, product/ops, ML engineers, students.
+
+---
+
+## 14. Conclusion
+
+The Complaint Intelligence Engine combines **unsupervised discovery**, **rule- and model-based risk scoring**, and **supervised multiclass/binary learning** with **explicit weekly statistics** (rolling z-scores, JS divergence, standardised drift scores). It **operationalises** a set of **operational hypotheses** (H1–H10) through **metrics and thresholds**; only some of these are **classical statistical tests**, while others are **information-theoretic**, **algorithmic**, or **machine-learning evaluation** measures.
+
+Treat **reported ML accuracy** as **diagnostic of the current weak labels and split**, not as guaranteed production performance, until **independent validation** is added.
+
+---
+
+## 15. Repository map
 
 | Path | Role |
 |------|------|
-| `01_ingest.py` … `12_drift_modeling.py` | Pipeline stages |
-| `run_pipeline.py` | Sequential orchestration |
-| `ml_utils.py` | Shared ML utilities and model registry updates |
-| `app.py` | Streamlit dashboard |
-| `data/` | CSV, numpy, TF-IDF artefacts |
-| `models/` | Trained models, `selected_models.json` |
-| `reports/` | `metrics_*.csv`, `model_selection_summary.md` |
-| `requirements.txt` | Python dependencies |
-| `README.md` | Setup and feature overview |
-| `PROJECT_REPORT.md` | Execution and outcome notes |
+| `01_ingest.py` … `12_drift_modeling.py`, `07_visualize.py` | Stages |
+| `run_pipeline.py` | Order: … `12` then `07` |
+| `ml_utils.py`, `ml_evaluation_plots.py` | Metrics + figure helpers |
+| `app.py` | Dashboard |
+| `data/`, `models/`, `reports/`, `figures/`, `reports/ml_figures/` | Artefacts |
+| `README.md`, `PROJECT_REPORT.md` | Setup and run notes |
 
 ---
 
-*Document generated to consolidate project documentation. Regenerate metrics and models with `python run_pipeline.py` after code or data changes.*
+*Regenerate all metrics and figures with `python run_pipeline.py` after code or data changes.*

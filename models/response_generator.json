@@ -3,6 +3,7 @@
   "generators": [
     "template_v1",
     "template_v2",
-    "template_v3"
+    "template_v3",
+    "template_v4"
   ]
 }

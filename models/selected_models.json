@@ -6,17 +6,17 @@
   },
   "router": {
     "selected_model": "linear_svc_tfidf",
-    "primary_metric": 0.9232747080275123,
+    "primary_metric": 0.9364951972691911,
     "metrics_file": "reports/metrics_router.csv"
   },
   "churn": {
-    "selected_model": "random_forest",
+    "selected_model": "gradient_boosting",
     "primary_metric": 1.0,
     "metrics_file": "reports/metrics_churn.csv"
   },
   "response_generation": {
     "selected_model": "template_v3",
-    "primary_metric": 0.5891392460682616,
+    "primary_metric": 0.5904149882748494,
     "metrics_file": "reports/metrics_response.csv"
   },
   "drift": {

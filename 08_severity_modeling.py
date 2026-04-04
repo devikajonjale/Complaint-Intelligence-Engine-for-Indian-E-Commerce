@@ -1,23 +1,38 @@
-"""Module 08: Severity predictor with model comparison."""
+"""Module 08: Severity predictor with extended evaluation, CV, and benchmark charts."""
 
 from __future__ import annotations
 
 import re
-from pathlib import Path
 
 import joblib
 import numpy as np
 import pandas as pd
+from sklearn.base import clone
 from sklearn.calibration import CalibratedClassifierCV
-from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import GradientBoostingClassifier, HistGradientBoostingClassifier, RandomForestClassifier
+from sklearn.linear_model import LogisticRegression, SGDClassifier
+from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
 
-from ml_utils import DATA_DIR, MODELS_DIR, REPORTS_DIR, ensure_dirs, measure_latency_ms, multiclass_metrics, update_selected_model
+from ml_evaluation_plots import save_confusion_matrix_heatmap, save_model_comparison_bars
+from ml_utils import (
+    DATA_DIR,
+    ML_FIGURES_DIR,
+    MODELS_DIR,
+    REPORTS_DIR,
+    cross_val_mean_std_multiclass,
+    ensure_dirs,
+    measure_latency_ms,
+    multiclass_metrics_extended,
+    per_class_classification_df,
+    update_selected_model,
+)
 
 import warnings
+
 warnings.filterwarnings("ignore")
 
 LEGAL_PAT = re.compile(r"\b(fraud|legal|police|consumer court|ncdrc|chargeback|harassment|scam)\b", re.I)
@@ -29,12 +44,12 @@ def weak_label(row: pd.Series) -> int:
     score = float(row.get("score", 3))
     thumbs = float(row.get("thumbs_up", 0))
     if LEGAL_PAT.search(txt):
-        return 2  # high
+        return 2
     if score <= 2 and thumbs >= 20:
-        return 1  # medium
+        return 1
     if score <= 2:
         return 1
-    return 0  # low
+    return 0
 
 
 def gold_label(row: pd.Series) -> int:
@@ -69,11 +84,8 @@ def main() -> None:
     df["severity_label_gold"] = df.apply(gold_label, axis=1)
     df["gold_split"] = "train"
     if len(df) >= 120:
-        idx = (
-            df.groupby("severity_label_gold", group_keys=False)
-            .apply(lambda x: x.sample(min(40, len(x)), random_state=42))
-            .index
-        )
+        gold_parts = [g.sample(min(40, len(g)), random_state=42) for _, g in df.groupby("severity_label_gold")]
+        idx = pd.concat(gold_parts).index
         df.loc[idx, "gold_split"] = "gold_eval"
 
     num = feature_frame(df)
@@ -82,7 +94,7 @@ def main() -> None:
     x_all = np.hstack([num.values, emb[: len(df)]])
     y = df["severity_label_weak"].values
 
-    x_train, x_test, y_train, y_test, idx_train, idx_test = train_test_split(
+    x_train, x_test, y_train, y_test, _, _ = train_test_split(
         x_all, y, np.arange(len(df)), test_size=0.2, random_state=42, stratify=y
     )
 
@@ -91,6 +103,13 @@ def main() -> None:
         "random_forest": RandomForestClassifier(n_estimators=250, random_state=42, class_weight="balanced"),
         "gradient_boosting": GradientBoostingClassifier(random_state=42),
         "linear_svc_calibrated": CalibratedClassifierCV(LinearSVC(class_weight="balanced", random_state=42)),
+        "hist_gbm": HistGradientBoostingClassifier(random_state=42, max_depth=8, learning_rate=0.08, max_iter=120),
+        "sgd_log": Pipeline(
+            [
+                ("scaler", StandardScaler()),
+                ("clf", SGDClassifier(loss="log_loss", max_iter=2500, random_state=42, class_weight="balanced")),
+            ]
+        ),
     }
 
     rows = []
@@ -98,21 +117,52 @@ def main() -> None:
     best_score = -1.0
     best_model = None
     for name, model in models.items():
-        model.fit(x_train, y_train)
-        y_pred = model.predict(x_test)
-        y_proba = model.predict_proba(x_test) if hasattr(model, "predict_proba") else None
-        m = multiclass_metrics(y_test, y_pred, y_proba)
-        latency = measure_latency_ms(model.predict, x_test[:1], repeats=120)
-        m["latency_ms"] = latency
+        mdl = clone(model)
+        mdl.fit(x_train, y_train)
+        y_pred = mdl.predict(x_test)
+        y_proba = mdl.predict_proba(x_test) if hasattr(mdl, "predict_proba") else None
+        m = multiclass_metrics_extended(y_test, y_pred, y_proba)
+        m["latency_ms"] = measure_latency_ms(mdl.predict, x_test[:1], repeats=80)
         m["model"] = name
+        cv_stats = cross_val_mean_std_multiclass(clone(model), x_train, y_train, cv=3)
+        m.update(cv_stats)
         rows.append(m)
         if m["weighted_f1"] > best_score:
             best_score = m["weighted_f1"]
             best_name = name
-            best_model = model
+            best_model = mdl
 
     metrics_df = pd.DataFrame(rows).sort_values("weighted_f1", ascending=False)
     metrics_df.to_csv(REPORTS_DIR / "metrics_severity.csv", index=False, encoding="utf-8-sig")
+
+    class_names = ["Low", "Medium", "High"]
+    if best_model is not None:
+        y_pred_best = best_model.predict(x_test)
+        per_class = per_class_classification_df(y_test, y_pred_best, class_names)
+        per_class.to_csv(REPORTS_DIR / "metrics_severity_per_class.csv", index=False, encoding="utf-8-sig")
+        cm = confusion_matrix(y_test, y_pred_best, labels=[0, 1, 2])
+        save_confusion_matrix_heatmap(
+            cm,
+            class_names,
+            ML_FIGURES_DIR / "severity_confusion_matrix.png",
+            "Severity model — confusion matrix (holdout test set)",
+        )
+
+    bar_cols = [
+        "weighted_f1",
+        "macro_f1",
+        "accuracy",
+        "balanced_accuracy",
+        "roc_auc_ovr",
+        "cv_f1_weighted_mean",
+    ]
+    save_model_comparison_bars(
+        metrics_df,
+        [c for c in bar_cols if c in metrics_df.columns],
+        ML_FIGURES_DIR / "severity_model_comparison.png",
+        "Severity models — holdout & CV metrics (higher is better)",
+    )
+
     joblib.dump(best_model, MODELS_DIR / "severity_model.pkl")
 
     pred_all = best_model.predict(x_all)

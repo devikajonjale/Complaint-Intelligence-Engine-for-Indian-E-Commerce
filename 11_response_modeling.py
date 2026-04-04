@@ -1,4 +1,4 @@
-"""Module 11: Auto-response generator and quality scoring."""
+"""Module 11: Auto-response generators with distribution metrics and charts."""
 
 from __future__ import annotations
 
@@ -8,9 +8,11 @@ import re
 import numpy as np
 import pandas as pd
 
-from ml_utils import DATA_DIR, MODELS_DIR, REPORTS_DIR, ensure_dirs, update_selected_model
+from ml_evaluation_plots import save_generator_quality_charts
+from ml_utils import DATA_DIR, ML_FIGURES_DIR, MODELS_DIR, REPORTS_DIR, ensure_dirs, update_selected_model
 
 import warnings
+
 warnings.filterwarnings("ignore")
 
 EMPATHY_TOKENS = {"sorry", "apologize", "understand", "regret"}
@@ -38,6 +40,13 @@ def gen_template_v3(route: str, complaint: str) -> str:
     )
 
 
+def gen_template_v4(route: str, complaint: str) -> str:
+    return (
+        f"Hi — we have logged your {route} concern. A support associate will reach out with next steps "
+        "and timelines after verifying your order and payment details."
+    )
+
+
 def quality_score(complaint: str, response: str) -> float:
     c_words = set(re.findall(r"[a-z]+", complaint.lower()))
     r_words = set(re.findall(r"[a-z]+", response.lower()))
@@ -58,20 +67,47 @@ def main() -> None:
         "template_v1": gen_template_v1,
         "template_v2": gen_template_v2,
         "template_v3": gen_template_v3,
+        "template_v4": gen_template_v4,
     }
-    sample = df.sample(min(300, len(df)), random_state=42).copy()
-    rows = []
+    sample = df.sample(min(400, len(df)), random_state=42).copy()
+    long_rows = []
+    summary_rows = []
     for name, fn in generators.items():
         scores = []
         for _, r in sample.iterrows():
             resp = fn(str(r["route_category"]), str(r["content"]))
-            scores.append(quality_score(str(r["content"]), resp))
-        rows.append({"generator": name, "avg_quality_score": float(np.mean(scores)), "p90_quality_score": float(np.percentile(scores, 90))})
+            s = quality_score(str(r["content"]), resp)
+            scores.append(s)
+            long_rows.append({"generator": name, "quality_score": s, "route_category": str(r["route_category"])})
+        arr = np.array(scores, dtype=float)
+        summary_rows.append(
+            {
+                "generator": name,
+                "n_samples": len(arr),
+                "avg_quality_score": float(np.mean(arr)),
+                "std_quality_score": float(np.std(arr)),
+                "min_quality_score": float(np.min(arr)),
+                "max_quality_score": float(np.max(arr)),
+                "p25_quality_score": float(np.percentile(arr, 25)),
+                "p50_quality_score": float(np.percentile(arr, 50)),
+                "p75_quality_score": float(np.percentile(arr, 75)),
+                "p90_quality_score": float(np.percentile(arr, 90)),
+            }
+        )
 
-    metrics = pd.DataFrame(rows).sort_values("avg_quality_score", ascending=False)
+    long_df = pd.DataFrame(long_rows)
+    metrics = pd.DataFrame(summary_rows).sort_values("avg_quality_score", ascending=False)
     metrics.to_csv(REPORTS_DIR / "metrics_response.csv", index=False, encoding="utf-8-sig")
-    best_name = metrics.iloc[0]["generator"]
+    long_df.to_csv(REPORTS_DIR / "metrics_response_scores_long.csv", index=False, encoding="utf-8-sig")
 
+    save_generator_quality_charts(
+        long_df,
+        metrics,
+        ML_FIGURES_DIR / "response_generator_mean_bar.png",
+        ML_FIGURES_DIR / "response_generator_score_boxplot.png",
+    )
+
+    best_name = metrics.iloc[0]["generator"]
     fn = generators[best_name]
     out = df.copy()
     out["suggested_response"] = out.apply(lambda r: fn(str(r["route_category"]), str(r["content"])), axis=1)
@@ -82,7 +118,12 @@ def main() -> None:
         json.dumps({"selected_generator": best_name, "generators": list(generators.keys())}, indent=2),
         encoding="utf-8",
     )
-    update_selected_model("response_generation", best_name, float(metrics.iloc[0]["avg_quality_score"]), {"metrics_file": "reports/metrics_response.csv"})
+    update_selected_model(
+        "response_generation",
+        best_name,
+        float(metrics.iloc[0]["avg_quality_score"]),
+        {"metrics_file": "reports/metrics_response.csv"},
+    )
     print(f"Response module complete. Selected generator: {best_name}")
 
 

@@ -14,9 +14,11 @@ warnings.filterwarnings("ignore")
 
 st.set_page_config(page_title="Complaint Intelligence Engine+", layout="wide")
 
-DATA_DIR    = Path("data")
-REPORTS_DIR = Path("reports")
-MODELS_DIR  = Path("models")
+DATA_DIR     = Path("data")
+REPORTS_DIR  = Path("reports")
+MODELS_DIR   = Path("models")
+FIGURES_DIR  = Path("figures")
+ML_FIGURES_DIR = REPORTS_DIR / "ml_figures"
 
 
 @st.cache_data
@@ -76,6 +78,53 @@ def show_model_table(task_name: str, metrics_file: str):
         st.info("No metrics generated yet.")
         return
     st.dataframe(mdf, use_container_width=True)
+
+
+def show_model_table_and_charts(
+    task_name: str,
+    metrics_file: str,
+    chart_prefix: str | None = None,
+    extra_tables: dict[str, str] | None = None,
+    plotly_bar_metrics: list[str] | None = None,
+) -> None:
+    """Show metrics CSV, optional per-task tables, Plotly bar chart of numeric columns, and saved seaborn PNGs."""
+    path = REPORTS_DIR / metrics_file
+    st.subheader(f"{task_name} — metrics, charts, and figures")
+    mdf = read_csv_opt(path)
+    if mdf is None or mdf.empty:
+        st.info("No metrics generated yet. Run the pipeline to populate reports.")
+    else:
+        st.markdown("**Metrics table**")
+        st.dataframe(mdf, use_container_width=True)
+        num_cols = mdf.select_dtypes(include=[np.number]).columns.tolist()
+        use_cols = [c for c in (plotly_bar_metrics or num_cols) if c in mdf.columns and c != "model"]
+        if "model" in mdf.columns and use_cols:
+            st.markdown("**Interactive metric comparison (Plotly)**")
+            melt = mdf.melt(id_vars=["model"], value_vars=use_cols, var_name="metric", value_name="value")
+            st.plotly_chart(
+                px.bar(melt, x="model", y="value", color="metric", barmode="group", title=f"{task_name}: model vs metrics"),
+                use_container_width=True,
+            )
+        elif {"metric", "value"}.issubset(mdf.columns):
+            st.markdown("**Summary metrics (Plotly)**")
+            st.plotly_chart(
+                px.bar(mdf, x="metric", y="value", title=f"{task_name}: summary values"),
+                use_container_width=True,
+            )
+    if extra_tables:
+        for label, rel in extra_tables.items():
+            tdf = read_csv_opt(REPORTS_DIR / rel)
+            if tdf is not None and not tdf.empty:
+                st.markdown(f"**{label}**")
+                st.dataframe(tdf, use_container_width=True)
+    if chart_prefix and ML_FIGURES_DIR.exists():
+        imgs = sorted(ML_FIGURES_DIR.glob(f"{chart_prefix}*.png"))
+        if imgs:
+            st.markdown("**Benchmark figures (darkgrid theme, from pipeline)**")
+            ncols = 2 if len(imgs) > 1 else 1
+            cols = st.columns(ncols)
+            for i, img in enumerate(imgs):
+                cols[i % ncols].image(str(img), caption=img.stem.replace("_", " ").title(), use_column_width=True)
 
 
 # ── Collapsible Quick Start box ───────────────────────────────────────────────
@@ -179,6 +228,7 @@ with st.sidebar:
             "Churn Risk",
             "Auto-Responder",
             "Drift Monitor",
+            "Pipeline & ML figures",
         ],
     )
 
@@ -195,7 +245,7 @@ with st.sidebar:
             st.code(result.stderr or result.stdout)
 
 # ── Load data (skip for guide page so it works even before pipeline runs) ──────
-if module != "How to Use This App":
+if module not in ("How to Use This App", "Pipeline & ML figures"):
     df, spike_df = load_data()
     if df is None:
         st.warning("No processed data found. Run `python run_pipeline.py` first, or read the **How to Use This App** guide in the sidebar.")
@@ -689,10 +739,10 @@ elif module == "Severity Triage":
     quick_start_box([
         "**Use the slider to set your response threshold.** The Severity Alert Threshold slider (0.0–1.0) filters the table to show only reviews scoring above your chosen cutoff. Start at 0.80 to see only the highest-risk complaints. Lower it to 0.65 on quieter days when you have bandwidth to investigate more.",
         "**Severity score interpretation:** 0.0–0.4 = Low (standard complaint, no escalation). 0.4–0.7 = Medium (recurring failure risk, review within 48 hours). 0.7–1.0 = High (legal threat, payment fraud, viral risk — act within hours).",
-        "**The table columns explained:** `severity_score_ml` is the XGBoost model's output probability for High severity. `severity_label_ml` is the discretised class (Low/Medium/High). `score` is the original star rating. `thumbs_up` is how many other users agreed with the complaint — high thumbs_up on a High-severity complaint means community amplification risk.",
-        "**SHAP-style explanation bar chart** shows the top 5 feature drivers for the highest-scoring review currently visible. Each bar represents how much that feature contributed to the High severity prediction. Legal/fraud keywords and low star rating are usually the top two drivers for genuinely critical complaints.",
-        "**If the SHAP chart shows 'No strong high-risk cues detected'** as the top driver with a tiny bar value, the model scored this review High primarily on its overall embedding similarity to other High-severity reviews rather than specific keyword signals — read the full review text to understand why.",
-        "**Model Comparison table at the bottom** shows weighted F1, calibration score, and inference latency for all five trained models (Logistic Regression, Random Forest, XGBoost, LinearSVC, DistilBERT). XGBoost is selected as the final model based on the best balance of weighted F1 and calibration curve reliability.",
+        "**The table columns explained:** `severity_score_ml` is the selected classifier's predicted probability (max over classes when available). `severity_label_ml` is the discretised class (Low/Medium/High). `score` is the original star rating. `thumbs_up` is how many other users agreed with the complaint — high thumbs_up on a High-severity complaint means community amplification risk.",
+        "**SHAP-style explanation bar chart** shows the top 5 heuristic drivers for the highest-scoring review currently visible (keyword and engagement cues — not full SHAP values).",
+        "**If the SHAP chart shows 'No strong high-risk cues detected'** as the top driver with a tiny bar value, the model may be relying more on dense embedding features — read the full review text to understand why.",
+        "**Metrics section below** lists holdout scores (accuracy, balanced accuracy, macro/weighted precision & recall, ROC AUC, log loss where available), 3-fold CV stability, latency, and saved confusion-matrix / bar charts from `reports/ml_figures/`. The winning model is recorded in `models/selected_models.json`.",
     ])
 
     if "severity_score_ml" in fdf.columns:
@@ -709,7 +759,13 @@ elif module == "Severity Triage":
             drv_df   = pd.DataFrame(drivers, columns=["Feature Driver", "Relative Impact"])
             st.bar_chart(drv_df.set_index("Feature Driver"))
             st.caption(f"Sample complaint: {str(exemplar.get('content', ''))[:220]}...")
-    show_model_table("Severity", "metrics_severity.csv")
+    show_model_table_and_charts(
+        "Severity triage",
+        "metrics_severity.csv",
+        chart_prefix="severity",
+        extra_tables={"Per-class precision/recall/F1 (holdout)": "metrics_severity_per_class.csv"},
+        plotly_bar_metrics=["weighted_f1", "macro_f1", "accuracy", "balanced_accuracy", "roc_auc_ovr", "cv_f1_weighted_mean"],
+    )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -747,7 +803,13 @@ elif module == "Complaint Router":
             px.histogram(fdf, x="route_category", color="platform", title="Routing Load by Category"),
             use_container_width=True,
         )
-    show_model_table("Router", "metrics_router.csv")
+    show_model_table_and_charts(
+        "Complaint router",
+        "metrics_router.csv",
+        chart_prefix="router",
+        extra_tables={"Per-class precision/recall/F1 (holdout)": "metrics_router_per_class.csv"},
+        plotly_bar_metrics=["macro_f1", "weighted_f1", "accuracy", "balanced_accuracy", "roc_auc_ovr", "cv_f1_macro_mean"],
+    )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -776,7 +838,12 @@ elif module == "Churn Risk":
             watch[[c for c in ["platform", "content", "churn_risk_score", "churn_risk_label", "route_category"] if c in watch.columns]],
             use_container_width=True,
         )
-    show_model_table("Churn", "metrics_churn.csv")
+    show_model_table_and_charts(
+        "Churn proxy",
+        "metrics_churn.csv",
+        chart_prefix="churn",
+        plotly_bar_metrics=["pr_auc", "roc_auc", "f1", "precision", "recall", "balanced_accuracy", "cv_pr_auc_mean"],
+    )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -789,10 +856,10 @@ elif module == "Auto-Responder":
     quick_start_box([
         "**Paste the complaint text** you want to respond to — this can be from the Critical Alerts table, the Severity Triage queue, or any inbound complaint text. Click Generate Responses to produce three draft responses.",
         "**The app routes the complaint first** (using the Module 02 router model) and uses the predicted category to make the response context-aware. A delivery complaint gets a logistics-oriented response; a payment complaint gets a refund-oriented response. This is what distinguishes it from a generic template.",
-        "**Three response tones are generated:** Formal Apology (lowest quality score — generic), Empathetic Listening (medium), and Resolution Focused (highest quality score — concrete next step with timeframe). The quality score is computed by a Ridge regression model trained on manually-scored response examples across three dimensions: empathy, specificity, and actionability.",
-        "**Quality score interpretation:** Below 0.65 = generic template-level response (do not send without editing). 0.65–0.80 = acceptable baseline, personalise before sending. Above 0.80 = high quality — minimal editing needed. The Resolution Focused option typically scores highest because it includes a specific action and a timeframe.",
-        "**Edit before sending.** These are drafts, not final responses. Replace generic placeholders ('contact support') with your platform's actual support channel, phone number, or ticket URL. Replace time estimates ('24 hours') with your real SLA.",
-        "**Use the Model Comparison table** at the bottom to see how BERTScore F1, quality regressor scores, and generic phrase rates compare across Mistral-7B (if available), template baseline, and the current response generation method. This shows quantitatively how much better a context-aware response is compared to a canned template.",
+        "**Live demo below** uses three short template variants with heuristic quality scores for UI speed. The **pipeline** compares four template generators on a held-out sample using overlap, empathy, and actionability heuristics — see the metrics table and charts.",
+        "**Quality score interpretation (heuristic):** Higher means more overlap with complaint terms plus empathy/action tokens. Always edit before sending.",
+        "**Edit before sending.** Replace placeholders with your real support channels and SLA.",
+        "**Metrics section** summarises mean/std/percentiles per generator and shows bar + boxplot figures from the pipeline.",
     ])
 
     txt = st.text_area("Paste complaint for auto-response", value="Delivery partner marked order delivered but I did not receive it.")
@@ -811,7 +878,13 @@ elif module == "Auto-Responder":
             score = 0.55 + 0.1 * i
             st.write(f"Option {i} (quality score: {min(score, 0.95):.2f})")
             st.info(r)
-    show_model_table("Auto-Response", "metrics_response.csv")
+    show_model_table_and_charts(
+        "Auto-response generators",
+        "metrics_response.csv",
+        chart_prefix="response",
+        extra_tables={"Per-response scores (sample, long)": "metrics_response_scores_long.csv"},
+        plotly_bar_metrics=["avg_quality_score", "p90_quality_score", "std_quality_score"],
+    )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -828,7 +901,7 @@ elif module == "Drift Monitor":
         "**`is_drift_alert = True` rows** are weeks where one or both signals exceeded the threshold set by the permutation test during pipeline training. For each flagged week, read 10–20 reviews from that specific week in the Complaint Landscape (filter by date range) to understand what new themes emerged.",
         "**How to use this for incident post-mortems.** After a known platform incident (new chatbot launch, courier partner change, payment gateway migration), check the Drift Monitor for that week. You should see a drift alert appearing 3–7 days after the incident as user reviews about the new issue accumulate — confirming that the change created a new complaint category.",
         "**No drift report available?** The `data/topic_drift_report.csv` is generated only when the pipeline has at least 6 weeks of review data (minimum needed for meaningful JSD calculation). Run the pipeline for several weeks or widen the Date Range to include more historical data.",
-        "**Model Comparison table** shows LDA vs BERTopic vs NMF topic coherence (C_v) scores, and ADWIN drift detection latency — how quickly each method detected known drift events.",
+        "**Metrics table** summarises weeks evaluated, alert counts, and distribution stats for centroid shift / JS divergence. **Figure** shows the weekly timeline produced by the pipeline.",
     ])
 
     drift = read_csv_opt(DATA_DIR / "topic_drift_report.csv")
@@ -840,4 +913,40 @@ elif module == "Drift Monitor":
         st.dataframe(drift.sort_values(["is_drift_alert", "week"], ascending=[False, False]), use_container_width=True)
     else:
         st.info("No drift report available.")
-    show_model_table("Drift", "metrics_drift.csv")
+    show_model_table_and_charts(
+        "Topic drift summary",
+        "metrics_drift.csv",
+        chart_prefix="drift",
+        plotly_bar_metrics=["value"],
+    )
+
+# ══════════════════════════════════════════════════════════════════════════════
+# MODULE: PIPELINE & ML FIGURES (gallery)
+# ══════════════════════════════════════════════════════════════════════════════
+elif module == "Pipeline & ML figures":
+    st.subheader("Pipeline & ML figures")
+    st.caption("Ten unique seaborn visualizations (figures/) and ML benchmark PNGs (reports/ml_figures/).")
+
+    st.markdown("### Dataset & insight charts (`figures/`)")
+    if FIGURES_DIR.exists():
+        viz_imgs = sorted(FIGURES_DIR.glob("viz_*.png"))
+        if viz_imgs:
+            cols = st.columns(2)
+            for i, p in enumerate(viz_imgs):
+                cols[i % 2].image(str(p), caption=p.name, use_column_width=True)
+        else:
+            st.info("No `viz_*.png` files yet. Run `python run_pipeline.py` (step 07 runs last).")
+    else:
+        st.info("Figures directory not found.")
+
+    st.markdown("### ML evaluation exports (`reports/ml_figures/`)")
+    if ML_FIGURES_DIR.exists():
+        ml_imgs = sorted(ML_FIGURES_DIR.glob("*.png"))
+        if ml_imgs:
+            cols = st.columns(2)
+            for i, p in enumerate(ml_imgs):
+                cols[i % 2].image(str(p), caption=p.name, use_column_width=True)
+        else:
+            st.info("No ML benchmark PNGs yet.")
+    else:
+        st.info("Run the pipeline to generate ML figures.")

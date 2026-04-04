@@ -1,0 +1,1601 @@
+﻿generator,quality_score,route_category
+template_v1,0.5840909090909091,Refund & Payment Issues
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.5874999999999999,Refund & Payment Issues
+template_v1,0.6086956521739131,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5882978723404255,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.625,Delivery Failure
+template_v1,0.55,Delivery Failure
+template_v1,0.5874999999999999,Fake/Counterfeit Product
+template_v1,0.6,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.6625,Delivery Failure
+template_v1,0.6142857142857143,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5714285714285714,Delivery Failure
+template_v1,0.6142857142857143,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.73,App Crash / UX Bug
+template_v1,0.5806818181818182,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.60625,Fake/Counterfeit Product
+template_v1,0.5921875,Refund & Payment Issues
+template_v1,0.5833333333333333,Refund & Payment Issues
+template_v1,0.6499999999999999,Delivery Failure
+template_v1,0.595,Refund & Payment Issues
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.5860000000000001,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5821428571428571,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.5673076923076923,Delivery Failure
+template_v1,0.595,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.6625,Delivery Failure
+template_v1,0.55,Delivery Failure
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.5704545454545454,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.6625,App Crash / UX Bug
+template_v1,0.625,Delivery Failure
+template_v1,0.7,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5691489361702127,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.7749999999999999,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.595,Fake/Counterfeit Product
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.5915384615384616,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.6625,App Crash / UX Bug
+template_v1,0.5874999999999999,Refund & Payment Issues
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.73,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.5714285714285714,Refund & Payment Issues
+template_v1,0.7749999999999999,App Crash / UX Bug
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.5764705882352941,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.6271428571428572,App Crash / UX Bug
+template_v1,0.73,App Crash / UX Bug
+template_v1,0.6029411764705882,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.64,App Crash / UX Bug
+template_v1,0.5640624999999999,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5891304347826087,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.73,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.7749999999999999,App Crash / UX Bug
+template_v1,0.64,App Crash / UX Bug
+template_v1,0.6,Delivery Failure
+template_v1,0.5941176470588235,Refund & Payment Issues
+template_v1,0.625,Refund & Payment Issues
+template_v1,0.6,Fake/Counterfeit Product
+template_v1,0.5982142857142857,Refund & Payment Issues
+template_v1,0.625,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.5935483870967742,Refund & Payment Issues
+template_v1,0.5673076923076923,Refund & Payment Issues
+template_v1,0.64,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5721311475409836,Refund & Payment Issues
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.64,App Crash / UX Bug
+template_v1,0.6,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.6785714285714286,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.7749999999999999,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.6,Refund & Payment Issues
+template_v1,0.5909090909090908,App Crash / UX Bug
+template_v1,0.6203125,Refund & Payment Issues
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.5625,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.5800000000000001,Refund & Payment Issues
+template_v1,0.5921875,Refund & Payment Issues
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.6625,Refund & Payment Issues
+template_v1,0.7,Delivery Failure
+template_v1,0.5800000000000001,Refund & Payment Issues
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.60625,App Crash / UX Bug
+template_v1,0.5867346938775511,Fake/Counterfeit Product
+template_v1,0.6029411764705882,Refund & Payment Issues
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5725,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5821428571428571,Refund & Payment Issues
+template_v1,0.6499999999999999,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5935483870967742,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.64,App Crash / UX Bug
+template_v1,0.6174999999999999,App Crash / UX Bug
+template_v1,0.6,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.625,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.5921875,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.6785714285714286,App Crash / UX Bug
+template_v1,0.6,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.6142857142857143,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5615384615384615,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.6727272727272727,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.6318181818181818,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.6142857142857143,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.6625,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5857142857142856,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.7749999999999999,App Crash / UX Bug
+template_v1,0.60625,Refund & Payment Issues
+template_v1,0.6625,App Crash / UX Bug
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.575,Refund & Payment Issues
+template_v1,0.7749999999999999,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.6,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.64,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.7,Fake/Counterfeit Product
+template_v1,0.7749999999999999,App Crash / UX Bug
+template_v1,0.7749999999999999,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.73,App Crash / UX Bug
+template_v1,0.595,Fake/Counterfeit Product
+template_v1,0.5793478260869565,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.5732758620689655,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.64,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.64,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.6785714285714286,App Crash / UX Bug
+template_v1,0.5772727272727273,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.60625,Fake/Counterfeit Product
+template_v1,0.625,App Crash / UX Bug
+template_v1,0.6499999999999999,App Crash / UX Bug
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.6625,Delivery Failure
+template_v1,0.55,Delivery Failure
+template_v1,0.595,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.59375,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.6625,App Crash / UX Bug
+template_v1,0.6142857142857143,App Crash / UX Bug
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.7749999999999999,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.6727272727272727,App Crash / UX Bug
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.60625,Delivery Failure
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5680000000000001,Fake/Counterfeit Product
+template_v1,0.6142857142857143,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.60625,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.578125,Delivery Failure
+template_v1,0.595,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.60625,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.64,App Crash / UX Bug
+template_v1,0.5821428571428571,Refund & Payment Issues
+template_v1,0.5764705882352941,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.64,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.6113636363636363,App Crash / UX Bug
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.5901785714285714,Refund & Payment Issues
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.6142857142857143,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.60625,App Crash / UX Bug
+template_v1,0.7749999999999999,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5970149253731343,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.578125,App Crash / UX Bug
+template_v1,0.5909090909090908,Refund & Payment Issues
+template_v1,0.64,App Crash / UX Bug
+template_v1,0.6625,Fake/Counterfeit Product
+template_v1,0.6625,App Crash / UX Bug
+template_v1,0.64,App Crash / UX Bug
+template_v1,0.6192307692307693,Refund & Payment Issues
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.7749999999999999,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.6727272727272727,App Crash / UX Bug
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.73,App Crash / UX Bug
+template_v1,0.5867346938775511,App Crash / UX Bug
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.625,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5800000000000001,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.5795081967213115,Refund & Payment Issues
+template_v1,0.7,Delivery Failure
+template_v1,0.6,App Crash / UX Bug
+template_v1,0.5725,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.64,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Refund & Payment Issues
+template_v1,0.5736842105263158,Refund & Payment Issues
+template_v1,0.622,App Crash / UX Bug
+template_v1,0.6,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Delivery Failure
+template_v1,0.6,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.7,Delivery Failure
+template_v1,0.5909090909090908,Delivery Failure
+template_v1,0.55,Delivery Failure
+template_v1,0.6,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v1,0.55,App Crash / UX Bug
+template_v1,0.5897058823529412,Refund & Payment Issues
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.55,Delivery Failure
+template_v1,0.625,Refund & Payment Issues
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Delivery Failure
+template_v1,0.55,Delivery Failure
+template_v1,0.5673076923076923,Fake/Counterfeit Product
+template_v1,0.6625,App Crash / UX Bug
+template_v1,0.61,Refund & Payment Issues
+template_v1,0.7,App Crash / UX Bug
+template_v1,0.5745454545454545,Fake/Counterfeit Product
+template_v1,0.5909090909090908,Refund & Payment Issues
+template_v1,0.559375,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.6625,Refund & Payment Issues
+template_v1,0.6625,Fake/Counterfeit Product
+template_v1,0.622,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.575,Refund & Payment Issues
+template_v1,0.6210526315789473,App Crash / UX Bug
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5846153846153845,Delivery Failure
+template_v1,0.55,Delivery Failure
+template_v1,0.6625,App Crash / UX Bug
+template_v1,0.6785714285714286,Delivery Failure
+template_v1,0.6120689655172413,Refund & Payment Issues
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.55,Fake/Counterfeit Product
+template_v1,0.5909090909090908,Fake/Counterfeit Product
+template_v1,0.55,Delivery Failure
+template_v2,0.5772727272727273,Refund & Payment Issues
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.578125,Refund & Payment Issues
+template_v2,0.6282608695652174,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5882978723404255,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.625,Delivery Failure
+template_v2,0.625,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Delivery Failure
+template_v2,0.6142857142857143,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Delivery Failure
+template_v2,0.8500000000000001,Fake/Counterfeit Product
+template_v2,0.5714285714285714,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.64,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.73,App Crash / UX Bug
+template_v2,0.5909090909090908,Refund & Payment Issues
+template_v2,0.64,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.60625,Refund & Payment Issues
+template_v2,0.5666666666666667,Refund & Payment Issues
+template_v2,0.6,Delivery Failure
+template_v2,0.595,Refund & Payment Issues
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.622,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5982142857142857,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.5673076923076923,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Delivery Failure
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.5704545454545454,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.6625,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.6499999999999999,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.597872340425532,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.7749999999999999,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.595,Fake/Counterfeit Product
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.5846153846153845,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.6625,App Crash / UX Bug
+template_v2,0.5874999999999999,Refund & Payment Issues
+template_v2,0.5909090909090908,App Crash / UX Bug
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.73,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.5928571428571429,Refund & Payment Issues
+template_v2,0.7749999999999999,App Crash / UX Bug
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.6029411764705882,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.6014285714285714,App Crash / UX Bug
+template_v2,0.73,App Crash / UX Bug
+template_v2,0.6029411764705882,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.64,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5891304347826087,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.73,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.7749999999999999,App Crash / UX Bug
+template_v2,0.64,App Crash / UX Bug
+template_v2,0.6499999999999999,Delivery Failure
+template_v2,0.5852941176470587,Refund & Payment Issues
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.575,Fake/Counterfeit Product
+template_v2,0.5821428571428571,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.5790322580645162,Refund & Payment Issues
+template_v2,0.5673076923076923,Refund & Payment Issues
+template_v2,0.64,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5721311475409836,Refund & Payment Issues
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.64,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.6785714285714286,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.7749999999999999,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.5909090909090908,App Crash / UX Bug
+template_v2,0.578125,Refund & Payment Issues
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.5625,Fake/Counterfeit Product
+template_v2,0.595,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.61,Refund & Payment Issues
+template_v2,0.578125,Refund & Payment Issues
+template_v2,0.6,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.6343749999999999,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.5800000000000001,Refund & Payment Issues
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.6625,App Crash / UX Bug
+template_v2,0.5591836734693878,Fake/Counterfeit Product
+template_v2,0.5764705882352941,Refund & Payment Issues
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5909090909090908,Refund & Payment Issues
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.56125,Fake/Counterfeit Product
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5821428571428571,Refund & Payment Issues
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5935483870967742,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.73,App Crash / UX Bug
+template_v2,0.6174999999999999,App Crash / UX Bug
+template_v2,0.6,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.625,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.5921875,App Crash / UX Bug
+template_v2,0.64,Fake/Counterfeit Product
+template_v2,0.6785714285714286,App Crash / UX Bug
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.6142857142857143,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5615384615384615,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5909090909090908,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.6215909090909091,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.6625,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5857142857142856,Refund & Payment Issues
+template_v2,0.64,Delivery Failure
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.7749999999999999,App Crash / UX Bug
+template_v2,0.60625,Refund & Payment Issues
+template_v2,0.71875,App Crash / UX Bug
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.625,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.595,Fake/Counterfeit Product
+template_v2,0.6,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.7,Fake/Counterfeit Product
+template_v2,0.7749999999999999,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.8200000000000001,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5695652173913044,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.5810344827586207,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.64,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.64,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.64,App Crash / UX Bug
+template_v2,0.6785714285714286,App Crash / UX Bug
+template_v2,0.6318181818181818,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.625,App Crash / UX Bug
+template_v2,0.6,App Crash / UX Bug
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.60625,Delivery Failure
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.58125,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.6625,App Crash / UX Bug
+template_v2,0.6142857142857143,App Crash / UX Bug
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.7749999999999999,App Crash / UX Bug
+template_v2,0.7,Delivery Failure
+template_v2,0.6727272727272727,App Crash / UX Bug
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.6625,Delivery Failure
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5680000000000001,Fake/Counterfeit Product
+template_v2,0.5660714285714286,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v2,0.73,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.578125,Refund & Payment Issues
+template_v2,0.5874999999999999,Fake/Counterfeit Product
+template_v2,0.64,App Crash / UX Bug
+template_v2,0.5660714285714286,Refund & Payment Issues
+template_v2,0.5764705882352941,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.64,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.6318181818181818,App Crash / UX Bug
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.5982142857142857,Refund & Payment Issues
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.6142857142857143,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.7749999999999999,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.60625,App Crash / UX Bug
+template_v2,0.7749999999999999,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.576865671641791,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.8500000000000001,Fake/Counterfeit Product
+template_v2,0.578125,App Crash / UX Bug
+template_v2,0.5772727272727273,Refund & Payment Issues
+template_v2,0.64,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.6625,App Crash / UX Bug
+template_v2,0.73,App Crash / UX Bug
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.7749999999999999,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.7136363636363636,App Crash / UX Bug
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.73,App Crash / UX Bug
+template_v2,0.5867346938775511,App Crash / UX Bug
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.61,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.5795081967213115,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.6,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.7,Delivery Failure
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.6210526315789473,Refund & Payment Issues
+template_v2,0.604,App Crash / UX Bug
+template_v2,0.625,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.6625,Delivery Failure
+template_v2,0.6499999999999999,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.64,Delivery Failure
+template_v2,0.55,Delivery Failure
+template_v2,0.6727272727272727,Delivery Failure
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.64,Delivery Failure
+template_v2,0.55,App Crash / UX Bug
+template_v2,0.5897058823529412,Refund & Payment Issues
+template_v2,0.7,App Crash / UX Bug
+template_v2,0.55,Delivery Failure
+template_v2,0.7749999999999999,Refund & Payment Issues
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Delivery Failure
+template_v2,0.55,Delivery Failure
+template_v2,0.5673076923076923,Fake/Counterfeit Product
+template_v2,0.6625,App Crash / UX Bug
+template_v2,0.59,Refund & Payment Issues
+template_v2,0.625,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5840909090909091,Refund & Payment Issues
+template_v2,0.56875,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.60625,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5860000000000001,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.5874999999999999,Refund & Payment Issues
+template_v2,0.5973684210526315,App Crash / UX Bug
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.6192307692307693,Delivery Failure
+template_v2,0.6625,Delivery Failure
+template_v2,0.6625,App Crash / UX Bug
+template_v2,0.6142857142857143,Delivery Failure
+template_v2,0.5655172413793104,Refund & Payment Issues
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Fake/Counterfeit Product
+template_v2,0.55,Delivery Failure
+template_v3,0.5840909090909091,Refund & Payment Issues
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.578125,Refund & Payment Issues
+template_v3,0.6282608695652174,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.597872340425532,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.625,Delivery Failure
+template_v3,0.625,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6,Delivery Failure
+template_v3,0.55,Delivery Failure
+template_v3,0.6142857142857143,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5714285714285714,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.64,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.73,App Crash / UX Bug
+template_v3,0.5909090909090908,Refund & Payment Issues
+template_v3,0.64,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5640624999999999,Refund & Payment Issues
+template_v3,0.5666666666666667,Refund & Payment Issues
+template_v3,0.6,Delivery Failure
+template_v3,0.595,Refund & Payment Issues
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.604,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5982142857142857,Refund & Payment Issues
+template_v3,0.7,Delivery Failure
+template_v3,0.5673076923076923,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Delivery Failure
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.5704545454545454,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.6625,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.6499999999999999,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5787234042553191,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.7749999999999999,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.595,Fake/Counterfeit Product
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.5915384615384616,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6625,App Crash / UX Bug
+template_v3,0.5874999999999999,Refund & Payment Issues
+template_v3,0.5909090909090908,App Crash / UX Bug
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.73,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.5928571428571429,Refund & Payment Issues
+template_v3,0.7749999999999999,App Crash / UX Bug
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.6271428571428572,App Crash / UX Bug
+template_v3,0.73,App Crash / UX Bug
+template_v3,0.6558823529411765,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.64,App Crash / UX Bug
+template_v3,0.5640624999999999,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6086956521739131,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.73,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.7749999999999999,App Crash / UX Bug
+template_v3,0.64,App Crash / UX Bug
+template_v3,0.6499999999999999,Delivery Failure
+template_v3,0.5852941176470587,Refund & Payment Issues
+template_v3,0.5874999999999999,Refund & Payment Issues
+template_v3,0.575,Fake/Counterfeit Product
+template_v3,0.5821428571428571,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.564516129032258,Refund & Payment Issues
+template_v3,0.5846153846153845,Refund & Payment Issues
+template_v3,0.64,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5795081967213115,Refund & Payment Issues
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.73,App Crash / UX Bug
+template_v3,0.6,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.6785714285714286,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.7749999999999999,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.575,Refund & Payment Issues
+template_v3,0.5909090909090908,App Crash / UX Bug
+template_v3,0.5921875,Refund & Payment Issues
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.5625,Fake/Counterfeit Product
+template_v3,0.595,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.61,Refund & Payment Issues
+template_v3,0.5921875,Refund & Payment Issues
+template_v3,0.6,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.690625,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.595,Refund & Payment Issues
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.6625,App Crash / UX Bug
+template_v3,0.5775510204081633,Fake/Counterfeit Product
+template_v3,0.5764705882352941,Refund & Payment Issues
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6318181818181818,Refund & Payment Issues
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.56125,Fake/Counterfeit Product
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5821428571428571,Refund & Payment Issues
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5935483870967742,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.73,App Crash / UX Bug
+template_v3,0.64,App Crash / UX Bug
+template_v3,0.6,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.625,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.5921875,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6785714285714286,App Crash / UX Bug
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6142857142857143,Delivery Failure
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.6464285714285714,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5615384615384615,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5909090909090908,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6215909090909091,Refund & Payment Issues
+template_v3,0.6142857142857143,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6625,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6,Refund & Payment Issues
+template_v3,0.64,Delivery Failure
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.7749999999999999,App Crash / UX Bug
+template_v3,0.60625,Refund & Payment Issues
+template_v3,0.71875,App Crash / UX Bug
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.625,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.595,Fake/Counterfeit Product
+template_v3,0.6,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.7,Fake/Counterfeit Product
+template_v3,0.7749999999999999,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.8200000000000001,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5891304347826087,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.5887931034482758,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.64,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.64,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.64,App Crash / UX Bug
+template_v3,0.6785714285714286,App Crash / UX Bug
+template_v3,0.5909090909090908,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.60625,Fake/Counterfeit Product
+template_v3,0.625,App Crash / UX Bug
+template_v3,0.6,App Crash / UX Bug
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.6625,Delivery Failure
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.5874999999999999,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.6625,App Crash / UX Bug
+template_v3,0.6142857142857143,App Crash / UX Bug
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.7749999999999999,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.6727272727272727,App Crash / UX Bug
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.6625,Delivery Failure
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5680000000000001,Fake/Counterfeit Product
+template_v3,0.5821428571428571,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.578125,Delivery Failure
+template_v3,0.685,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6203125,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.64,App Crash / UX Bug
+template_v3,0.5982142857142857,Refund & Payment Issues
+template_v3,0.6029411764705882,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.64,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6522727272727273,App Crash / UX Bug
+template_v3,0.6625,App Crash / UX Bug
+template_v3,0.5901785714285714,Refund & Payment Issues
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.6142857142857143,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.7749999999999999,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.60625,App Crash / UX Bug
+template_v3,0.7749999999999999,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5902985074626865,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5640624999999999,App Crash / UX Bug
+template_v3,0.5772727272727273,Refund & Payment Issues
+template_v3,0.64,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.71875,App Crash / UX Bug
+template_v3,0.73,App Crash / UX Bug
+template_v3,0.6192307692307693,Refund & Payment Issues
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.7749999999999999,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6727272727272727,App Crash / UX Bug
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.73,App Crash / UX Bug
+template_v3,0.5867346938775511,App Crash / UX Bug
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.625,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.6558823529411765,Fake/Counterfeit Product
+template_v3,0.5800000000000001,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.5868852459016394,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.6,App Crash / UX Bug
+template_v3,0.5725,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.7,Delivery Failure
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Refund & Payment Issues
+template_v3,0.5973684210526315,Refund & Payment Issues
+template_v3,0.604,App Crash / UX Bug
+template_v3,0.6,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.6625,Delivery Failure
+template_v3,0.6499999999999999,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.64,Delivery Failure
+template_v3,0.55,Delivery Failure
+template_v3,0.5909090909090908,Delivery Failure
+template_v3,0.55,Delivery Failure
+template_v3,0.6,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.64,Delivery Failure
+template_v3,0.55,App Crash / UX Bug
+template_v3,0.6029411764705882,Refund & Payment Issues
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.55,Delivery Failure
+template_v3,0.7,Refund & Payment Issues
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Delivery Failure
+template_v3,0.55,Delivery Failure
+template_v3,0.5846153846153845,Fake/Counterfeit Product
+template_v3,0.6625,App Crash / UX Bug
+template_v3,0.6,Refund & Payment Issues
+template_v3,0.7,App Crash / UX Bug
+template_v3,0.5581818181818181,Fake/Counterfeit Product
+template_v3,0.5909090909090908,Refund & Payment Issues
+template_v3,0.5874999999999999,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.60625,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.604,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6,Refund & Payment Issues
+template_v3,0.5973684210526315,App Crash / UX Bug
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.6538461538461539,Delivery Failure
+template_v3,0.6625,Delivery Failure
+template_v3,0.6625,App Crash / UX Bug
+template_v3,0.6142857142857143,Delivery Failure
+template_v3,0.596551724137931,Refund & Payment Issues
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.55,Fake/Counterfeit Product
+template_v3,0.5909090909090908,Fake/Counterfeit Product
+template_v3,0.55,Delivery Failure
+template_v4,0.3340909090909091,Refund & Payment Issues
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.328125,Refund & Payment Issues
+template_v4,0.3391304347826087,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.3478723404255319,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Delivery Failure
+template_v4,0.075,Delivery Failure
+template_v4,0.0375,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.049999999999999996,Delivery Failure
+template_v4,0.0,Delivery Failure
+template_v4,0.06428571428571428,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.04285714285714286,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.09000000000000001,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.32045454545454544,Refund & Payment Issues
+template_v4,0.09000000000000001,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.31666666666666665,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.3225,Refund & Payment Issues
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.318,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.34017857142857144,Refund & Payment Issues
+template_v4,0.15,Delivery Failure
+template_v4,0.01730769230769231,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.15,App Crash / UX Bug
+template_v4,0.1125,Delivery Failure
+template_v4,0.0,Delivery Failure
+template_v4,0.15,App Crash / UX Bug
+template_v4,0.020454545454545454,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.1125,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.35,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.3191489361702128,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.1125,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.045000000000000005,Fake/Counterfeit Product
+template_v4,0.075,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.3415384615384615,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.05625,App Crash / UX Bug
+template_v4,0.33749999999999997,Refund & Payment Issues
+template_v4,0.04090909090909091,App Crash / UX Bug
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.3214285714285714,Refund & Payment Issues
+template_v4,0.1125,App Crash / UX Bug
+template_v4,0.15,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.06428571428571428,App Crash / UX Bug
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.37941176470588234,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.028125,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0782608695652174,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.225,App Crash / UX Bug
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.049999999999999996,Delivery Failure
+template_v4,0.3529411764705882,Refund & Payment Issues
+template_v4,0.33749999999999997,Refund & Payment Issues
+template_v4,0.024999999999999998,Fake/Counterfeit Product
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.15,App Crash / UX Bug
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.3519230769230769,Refund & Payment Issues
+template_v4,0.045000000000000005,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.3221311475409836,Refund & Payment Issues
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.18000000000000002,App Crash / UX Bug
+template_v4,0.049999999999999996,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.06428571428571428,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.225,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.15,App Crash / UX Bug
+template_v4,0.15,App Crash / UX Bug
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.08181818181818182,App Crash / UX Bug
+template_v4,0.31406249999999997,Refund & Payment Issues
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.024999999999999998,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.36,Refund & Payment Issues
+template_v4,0.31406249999999997,Refund & Payment Issues
+template_v4,0.09999999999999999,App Crash / UX Bug
+template_v4,0.15,Fake/Counterfeit Product
+template_v4,0.384375,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.32999999999999996,Refund & Payment Issues
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.075,App Crash / UX Bug
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.05625,App Crash / UX Bug
+template_v4,0.009183673469387754,Fake/Counterfeit Product
+template_v4,0.3264705882352941,Refund & Payment Issues
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.3409090909090909,Refund & Payment Issues
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.020454545454545454,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.011250000000000001,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.36428571428571427,Refund & Payment Issues
+template_v4,0.09999999999999999,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.34354838709677415,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.18000000000000002,App Crash / UX Bug
+template_v4,0.045000000000000005,App Crash / UX Bug
+template_v4,0.33749999999999997,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.075,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.028125,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.06428571428571428,App Crash / UX Bug
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.06428571428571428,Delivery Failure
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.36428571428571427,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.32307692307692304,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.04090909090909091,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.3409090909090909,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.1125,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.32857142857142857,Refund & Payment Issues
+template_v4,0.09000000000000001,Delivery Failure
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.225,App Crash / UX Bug
+template_v4,0.328125,Refund & Payment Issues
+template_v4,0.1125,App Crash / UX Bug
+template_v4,0.15,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.325,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.049999999999999996,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.09000000000000001,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.225,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.31956521739130433,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.3310344827586207,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.06428571428571428,App Crash / UX Bug
+template_v4,0.32727272727272727,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.05625,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.049999999999999996,App Crash / UX Bug
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.1125,Delivery Failure
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.31875,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.1125,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.06428571428571428,App Crash / UX Bug
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.1125,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.04090909090909091,App Crash / UX Bug
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Delivery Failure
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.036000000000000004,Fake/Counterfeit Product
+template_v4,0.3482142857142857,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure
+template_v4,0.06428571428571428,Fake/Counterfeit Product
+template_v4,0.028125,Delivery Failure
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.328125,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.3482142857142857,Refund & Payment Issues
+template_v4,0.026470588235294117,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.020454545454545454,App Crash / UX Bug
+template_v4,0.1125,App Crash / UX Bug
+template_v4,0.33214285714285713,Refund & Payment Issues
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.15,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.09000000000000001,Fake/Counterfeit Product
+template_v4,0.05625,App Crash / UX Bug
+template_v4,0.1125,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.32686567164179103,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.32727272727272727,Refund & Payment Issues
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.16875,App Crash / UX Bug
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.43846153846153846,Refund & Payment Issues
+template_v4,0.15,App Crash / UX Bug
+template_v4,0.15,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.1125,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.04090909090909091,App Crash / UX Bug
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.09000000000000001,App Crash / UX Bug
+template_v4,0.027551020408163266,App Crash / UX Bug
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.075,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.052941176470588235,Fake/Counterfeit Product
+template_v4,0.03,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.3295081967213115,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.049999999999999996,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.09000000000000001,Fake/Counterfeit Product
+template_v4,0.15,Delivery Failure
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.3,Refund & Payment Issues
+template_v4,0.34736842105263155,Refund & Payment Issues
+template_v4,0.054,App Crash / UX Bug
+template_v4,0.024999999999999998,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.1125,Delivery Failure
+template_v4,0.09999999999999999,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.09000000000000001,Delivery Failure
+template_v4,0.0,Delivery Failure
+template_v4,0.04090909090909091,Delivery Failure
+template_v4,0.0,Delivery Failure
+template_v4,0.35,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.09000000000000001,Delivery Failure
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.3397058823529412,Refund & Payment Issues
+template_v4,0.15,App Crash / UX Bug
+template_v4,0.0,Delivery Failure
+template_v4,0.375,Refund & Payment Issues
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Delivery Failure
+template_v4,0.0,Delivery Failure
+template_v4,0.01730769230769231,Fake/Counterfeit Product
+template_v4,0.0,App Crash / UX Bug
+template_v4,0.35,Refund & Payment Issues
+template_v4,0.075,App Crash / UX Bug
+template_v4,0.016363636363636365,Fake/Counterfeit Product
+template_v4,0.3340909090909091,Refund & Payment Issues
+template_v4,0.346875,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.4125,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.33599999999999997,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.33749999999999997,Refund & Payment Issues
+template_v4,0.07105263157894737,App Crash / UX Bug
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.10384615384615385,Delivery Failure
+template_v4,0.1125,Delivery Failure
+template_v4,0.1125,App Crash / UX Bug
+template_v4,0.06428571428571428,Delivery Failure
+template_v4,0.3310344827586207,Refund & Payment Issues
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.0,Fake/Counterfeit Product
+template_v4,0.04090909090909091,Fake/Counterfeit Product
+template_v4,0.0,Delivery Failure

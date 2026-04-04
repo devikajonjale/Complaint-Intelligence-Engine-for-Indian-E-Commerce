@@ -1,0 +1,4 @@
+﻿class,precision,recall,f1,support
+Low,1.0,1.0,1.0,307
+Medium,1.0,1.0,1.0,133
+High,1.0,1.0,1.0,8
