@@ -1,12 +1,12 @@
 {
   "severity": {
     "selected_model": "linear_svc_calibrated",
-    "primary_metric": 0.8652753385277955,
+    "primary_metric": 0.8670425562391765,
     "metrics_file": "reports/metrics_severity.csv"
   },
   "router": {
     "selected_model": "linear_svc_tfidf",
-    "primary_metric": 0.8858371699748268,
+    "primary_metric": 0.8846387615623506,
     "metrics_file": "reports/metrics_router.csv"
   },
   "churn": {
@@ -16,7 +16,7 @@
   },
   "response_generation": {
     "selected_model": "template_v1",
-    "primary_metric": 0.5856223424757696,
+    "primary_metric": 0.584963861540218,
     "metrics_file": "reports/metrics_response.csv"
   },
   "drift": {

@@ -2,9 +2,9 @@
 weeks_evaluated,27.0,count
 drift_alert_weeks,6.0,count
 alert_rate,0.2222222222222222,rate
-mean_centroid_shift,0.3168201852175925,numeric
-std_centroid_shift,0.11388967679824778,numeric
-mean_js_divergence,0.05425761162372627,numeric
+mean_centroid_shift,0.31682614595801745,numeric
+std_centroid_shift,0.11389167239983414,numeric
+mean_js_divergence,0.05426746355465473,numeric
 max_js_divergence,0.15498307594822436,numeric
-max_shift_z,3.3944589639612732,numeric
-max_js_z,2.3906126084762023,numeric
+max_shift_z,3.394347149570123,numeric
+max_js_z,2.391804355243462,numeric
