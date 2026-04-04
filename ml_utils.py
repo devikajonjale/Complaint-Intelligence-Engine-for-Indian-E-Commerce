@@ -147,6 +147,41 @@ def binary_metrics(y_true: np.ndarray, y_pred: np.ndarray, y_score: np.ndarray) 
     return out
 
 
+def group_or_stratified_split_indices(
+    y: np.ndarray,
+    groups: np.ndarray | None,
+    test_size: float = 0.25,
+    random_state: int = 42,
+) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Prefer GroupShuffleSplit (hold out entire platforms / groups) to reduce same-corpus leakage.
+    Falls back to stratified index split if not enough groups or test set lacks class diversity.
+    """
+    from sklearn.model_selection import GroupShuffleSplit, train_test_split
+
+    y = np.asarray(y)
+    n = len(y)
+    idx = np.arange(n)
+    classes = np.unique(y)
+    need_both = len(classes) >= 2
+
+    if groups is not None:
+        groups = np.asarray(groups)
+        if len(np.unique(groups)) >= 2:
+            gss = GroupShuffleSplit(n_splits=1, test_size=test_size, random_state=random_state)
+            train_idx, test_idx = next(gss.split(idx, y, groups))
+            if not need_both or len(np.unique(y[test_idx])) >= 2:
+                return train_idx, test_idx
+
+    train_idx, test_idx = train_test_split(
+        idx,
+        test_size=test_size,
+        random_state=random_state,
+        stratify=y if need_both else None,
+    )
+    return train_idx, test_idx
+
+
 def cross_val_mean_std_multiclass(model, x: np.ndarray, y: np.ndarray, cv: int = 5, random_state: int = 42) -> dict[str, float]:
     from sklearn.model_selection import StratifiedKFold, cross_val_score
 

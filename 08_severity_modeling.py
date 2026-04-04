@@ -1,4 +1,4 @@
-"""Module 08: Severity predictor with extended evaluation, CV, and benchmark charts."""
+"""Module 08: Severity predictor — reduced leakage, group holdout, regularized models."""
 
 from __future__ import annotations
 
@@ -12,7 +12,6 @@ from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import GradientBoostingClassifier, HistGradientBoostingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.metrics import confusion_matrix
-from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
@@ -25,6 +24,7 @@ from ml_utils import (
     REPORTS_DIR,
     cross_val_mean_std_multiclass,
     ensure_dirs,
+    group_or_stratified_split_indices,
     measure_latency_ms,
     multiclass_metrics_extended,
     per_class_classification_df,
@@ -62,15 +62,15 @@ def gold_label(row: pd.Series) -> int:
     return 0
 
 
-def feature_frame(df: pd.DataFrame) -> pd.DataFrame:
+def tabular_features_no_rule_leakage(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Exclude features that duplicate weak_label rules (legal/money regex, star rating, thumbs).
+    Model must rely on SBERT semantics plus coarse text-shape cues — realistic generalization eval.
+    """
     txt = df["content"].fillna("").astype(str)
     return pd.DataFrame(
         {
             "review_length": df["review_length"].fillna(0),
-            "score": df["score"].fillna(3),
-            "thumbs_up_log": np.log1p(df["thumbs_up"].fillna(0)),
-            "has_legal_keyword": txt.str.contains(LEGAL_PAT, regex=True).astype(int),
-            "has_money_keyword": txt.str.contains(MONEY_PAT, regex=True).astype(int),
             "exclamation_count": txt.str.count("!"),
             "capital_ratio": txt.apply(lambda s: (sum(1 for c in s if c.isupper()) / max(len(s), 1))),
         }
@@ -88,26 +88,60 @@ def main() -> None:
         idx = pd.concat(gold_parts).index
         df.loc[idx, "gold_split"] = "gold_eval"
 
-    num = feature_frame(df)
+    num = tabular_features_no_rule_leakage(df)
     embeddings_path = DATA_DIR / "embeddings.npy"
     emb = np.load(embeddings_path) if embeddings_path.exists() else np.zeros((len(df), 16))
-    x_all = np.hstack([num.values, emb[: len(df)]])
+    x_all = np.hstack([num.values.astype(np.float64), emb[: len(df)]])
     y = df["severity_label_weak"].values
+    groups = df["platform"].fillna("unknown").astype(str).values
 
-    x_train, x_test, y_train, y_test, _, _ = train_test_split(
-        x_all, y, np.arange(len(df)), test_size=0.2, random_state=42, stratify=y
-    )
+    train_idx, test_idx = group_or_stratified_split_indices(y, groups, test_size=0.25, random_state=42)
+    x_train, x_test = x_all[train_idx], x_all[test_idx]
+    y_train, y_test = y[train_idx], y[test_idx]
 
     models = {
-        "logreg": LogisticRegression(max_iter=2000, class_weight="balanced"),
-        "random_forest": RandomForestClassifier(n_estimators=250, random_state=42, class_weight="balanced"),
-        "gradient_boosting": GradientBoostingClassifier(random_state=42),
-        "linear_svc_calibrated": CalibratedClassifierCV(LinearSVC(class_weight="balanced", random_state=42)),
-        "hist_gbm": HistGradientBoostingClassifier(random_state=42, max_depth=8, learning_rate=0.08, max_iter=120),
+        "logreg": LogisticRegression(max_iter=3000, class_weight="balanced", C=0.25, solver="lbfgs"),
+        "random_forest": RandomForestClassifier(
+            n_estimators=200,
+            random_state=42,
+            class_weight="balanced",
+            max_depth=10,
+            min_samples_leaf=6,
+            max_features="sqrt",
+        ),
+        "gradient_boosting": GradientBoostingClassifier(
+            random_state=42,
+            max_depth=2,
+            subsample=0.75,
+            n_estimators=120,
+            learning_rate=0.04,
+            min_samples_leaf=12,
+        ),
+        "linear_svc_calibrated": CalibratedClassifierCV(
+            LinearSVC(class_weight="balanced", random_state=42, C=0.35, max_iter=4000)
+        ),
+        "hist_gbm": HistGradientBoostingClassifier(
+            random_state=42,
+            max_depth=4,
+            learning_rate=0.05,
+            max_iter=150,
+            l2_regularization=0.25,
+            min_samples_leaf=20,
+        ),
         "sgd_log": Pipeline(
             [
                 ("scaler", StandardScaler()),
-                ("clf", SGDClassifier(loss="log_loss", max_iter=2500, random_state=42, class_weight="balanced")),
+                (
+                    "clf",
+                    SGDClassifier(
+                        loss="log_loss",
+                        max_iter=2500,
+                        random_state=42,
+                        class_weight="balanced",
+                        alpha=0.02,
+                        penalty="l2",
+                    ),
+                ),
             ]
         ),
     }
@@ -115,7 +149,7 @@ def main() -> None:
     rows = []
     best_name = None
     best_score = -1.0
-    best_model = None
+    best_key = None
     for name, model in models.items():
         mdl = clone(model)
         mdl.fit(x_train, y_train)
@@ -124,19 +158,26 @@ def main() -> None:
         m = multiclass_metrics_extended(y_test, y_pred, y_proba)
         m["latency_ms"] = measure_latency_ms(mdl.predict, x_test[:1], repeats=80)
         m["model"] = name
+        m["eval_split"] = "group_holdout_platform"
         cv_stats = cross_val_mean_std_multiclass(clone(model), x_train, y_train, cv=3)
         m.update(cv_stats)
         rows.append(m)
         if m["weighted_f1"] > best_score:
             best_score = m["weighted_f1"]
             best_name = name
-            best_model = mdl
+            best_key = name
 
     metrics_df = pd.DataFrame(rows).sort_values("weighted_f1", ascending=False)
     metrics_df.to_csv(REPORTS_DIR / "metrics_severity.csv", index=False, encoding="utf-8-sig")
 
     class_names = ["Low", "Medium", "High"]
+    if best_key is None and len(metrics_df):
+        best_key = str(metrics_df.iloc[0]["model"])
+        best_name = best_key
+        best_score = float(metrics_df.iloc[0]["weighted_f1"])
+    best_model = clone(models[best_key]) if best_key else None
     if best_model is not None:
+        best_model.fit(x_train, y_train)
         y_pred_best = best_model.predict(x_test)
         per_class = per_class_classification_df(y_test, y_pred_best, class_names)
         per_class.to_csv(REPORTS_DIR / "metrics_severity_per_class.csv", index=False, encoding="utf-8-sig")
@@ -145,7 +186,7 @@ def main() -> None:
             cm,
             class_names,
             ML_FIGURES_DIR / "severity_confusion_matrix.png",
-            "Severity model — confusion matrix (holdout test set)",
+            "Severity — confusion matrix (platform group holdout)",
         )
 
     bar_cols = [
@@ -160,23 +201,29 @@ def main() -> None:
         metrics_df,
         [c for c in bar_cols if c in metrics_df.columns],
         ML_FIGURES_DIR / "severity_model_comparison.png",
-        "Severity models — holdout & CV metrics (higher is better)",
+        "Severity models — group holdout + CV (reduced feature leakage)",
     )
 
-    joblib.dump(best_model, MODELS_DIR / "severity_model.pkl")
-
-    pred_all = best_model.predict(x_all)
-    if hasattr(best_model, "predict_proba"):
-        proba_all = best_model.predict_proba(x_all).max(axis=1)
+    production = clone(models[best_key]) if best_key else None
+    if production is not None:
+        production.fit(x_all, y)
+        joblib.dump(production, MODELS_DIR / "severity_model.pkl")
+        pred_all = production.predict(x_all)
+        if hasattr(production, "predict_proba"):
+            proba_all = production.predict_proba(x_all).max(axis=1)
+        else:
+            proba_all = np.ones(len(df)) * 0.5
     else:
-        proba_all = np.ones(len(df)) * 0.5
+        pred_all = np.zeros(len(df), dtype=int)
+        proba_all = np.ones(len(df)) * 0.33
+
     label_map = {0: "Low", 1: "Medium", 2: "High"}
     df["severity_label_ml"] = pd.Series(pred_all).map(label_map)
     df["severity_score_ml"] = proba_all
     df.to_csv(DATA_DIR / "final_reviews_scored.csv", index=False, encoding="utf-8-sig")
 
     update_selected_model("severity", best_name or "unknown", best_score, {"metrics_file": "reports/metrics_severity.csv"})
-    print(f"Severity module complete. Selected model: {best_name} (weighted_f1={best_score:.4f})")
+    print(f"Severity module complete. Selected model: {best_name} (weighted_f1={best_score:.4f}, group holdout)")
 
 
 if __name__ == "__main__":

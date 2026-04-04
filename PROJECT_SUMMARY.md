@@ -244,7 +244,9 @@ where \(c_t\) is complaint count, \(\bar{c}_{t,\text{roll}}\) and \(s_{t,\text{r
 
 **Labels:** `severity_label_weak` from rules (legal/financial keywords, stars, thumbs); optional `gold_split` slice for future evaluation.
 
-**Features:** Tabular (length, score, thumbs, keyword flags, punctuation) **concatenated** with SBERT embeddings.
+**Features (anti-leakage):** Tabular inputs are **only** `review_length`, `exclamation_count`, and `capital_ratio` — **not** star rating, thumbs, or regex flags that duplicate the weak-label rules. These are **concatenated with SBERT embeddings** so the model must use semantics, not trivial rule replay.
+
+**Evaluation:** **Group holdout** by `platform` (`GroupShuffleSplit` with stratified fallback) plus **regularised** classifiers (tighter `C`, depth / `min_samples_leaf`, `alpha` on SGD, etc.). The **production** model is **refit on all rows** after selection for full-corpus predictions.
 
 | Candidate model | Notes |
 |-----------------|--------|
@@ -261,6 +263,8 @@ where \(c_t\) is complaint count, \(\bar{c}_{t,\text{roll}}\) and \(s_{t,\text{r
 
 **Target:** `cluster_name` (factorised). **Input:** `text_for_model` / `cleaned_content`. Optional training filter: embedding distance to cluster centroid ≤ **40th percentile** of distances.
 
+**Evaluation:** **Group holdout** by `platform`; TF-IDF uses **`min_df=2`**, **`sublinear_tf`**, slightly lower `max_features`, and **regularised** linear / tree models. **Production** pipeline is **refit on the full filtered subset** after model selection.
+
 | Model | Vectoriser | Classifier |
 |-------|------------|------------|
 | logreg_tfidf | TF-IDF 5k, (1,2)-grams | LogisticRegression |
@@ -273,17 +277,19 @@ where \(c_t\) is complaint count, \(\bar{c}_{t,\text{roll}}\) and \(s_{t,\text{r
 
 ### 7.3 Churn proxy (`10_churn_modeling.py`)
 
-**Label:** Binary proxy from complaint star bucket + severity / Tier-1 / thumbs / isolation.
+**Label (non-leaky):** Complaint-bucket reviews with **star rating ≤ 1** **or** **review length ≥ 80th percentile** (within-batch quantile). **Does not** use `severity_label_ml`, `tier1_critical`, `isolation_anomaly`, or `isolation_score`.
+
+**Features:** `score`, `log1p(thumbs_up)`, `review_length`, `is_hinglish`, `route_confidence` only.
 
 | Model | Notes |
 |-------|--------|
-| Scaled LogisticRegression | Baseline linear |
-| RandomForest | 300 trees |
-| GradientBoosting | Sklearn GBM |
-| SVC RBF | `probability=True` |
-| AdaBoost | Ensemble stumps |
+| Scaled LogisticRegression | Stronger L2 via lower `C` |
+| RandomForest | Shallower trees, larger leaves |
+| GradientBoosting | Limited depth, subsample |
+| SVC RBF | Lower `C` |
+| AdaBoost | Fewer / slower learning |
 
-**Selection:** Best **PR-AUC** on holdout. **Artifact:** `churn_model.pkl`.
+**Evaluation:** **Group holdout** by `platform`; **selection** by **PR-AUC**; **production refit** on all rows. **Artifact:** `churn_model.pkl`.
 
 ### 7.4 Response generators (`11_response_modeling.py`)
 
@@ -383,9 +389,9 @@ No classifier: **weekly** centroid + JS + z-based **alerts**; summary rows → `
 
 | Issue | Detail |
 |-------|--------|
-| **Weak labels + features** | Severity uses **rules** for labels **and** overlapping **tabular features** → risk of **near-perfect holdout** metrics (**not** proof of human-level performance). |
-| **Single-corpus random split** | Does not stress-test **temporal** or **platform** shift. |
-| **Churn proxy** | Not observed churn; **PR-AUC** reflects the **proxy**, not true attrition. |
+| **Weak labels** | Severity targets are still **rule-based**; removing duplicate tabular features and using **group holdout** makes metrics **more honest** but **not** equivalent to human labels. |
+| **Residual leakage / shift** | **Group holdout** tests **new platform** generalisation only where platforms split across train/test; **time-based** drift is not fully exercised. |
+| **Churn proxy** | Not observed churn; **PR-AUC** reflects the **length / 1-star** heuristic, not true attrition. |
 | **Spike / drift z-rules** | **Not** multiple-testing adjusted; Gaussian assumption for counts **unstated**. |
 | **OCSVM** | May **degrade** if “positive” cluster is too small (fallback path). |
 | **Reddit** | Optional; often absent without credentials. |

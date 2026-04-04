@@ -11,7 +11,6 @@ from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix
-from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
 from sklearn.svm import LinearSVC
@@ -24,6 +23,7 @@ from ml_utils import (
     REPORTS_DIR,
     cross_val_mean_std_multiclass,
     ensure_dirs,
+    group_or_stratified_split_indices,
     measure_latency_ms,
     multiclass_metrics_extended,
     per_class_classification_df,
@@ -61,39 +61,66 @@ def main() -> None:
     else:
         keep = np.ones(len(df), dtype=bool)
 
-    x_train, x_test, y_train, y_test = train_test_split(
-        text[keep], y[keep], test_size=0.2, random_state=42, stratify=y[keep]
-    )
+    idx_keep = np.where(keep)[0]
+    text_f = text.iloc[idx_keep].reset_index(drop=True)
+    y_f = y[keep]
+    groups_f = df.iloc[idx_keep]["platform"].fillna("unknown").astype(str).values
+
+    tr_idx, te_idx = group_or_stratified_split_indices(y_f, groups_f, test_size=0.25, random_state=43)
+    x_train = text_f.iloc[tr_idx]
+    x_test = text_f.iloc[te_idx]
+    y_train = y_f[tr_idx]
+    y_test = y_f[te_idx]
 
     models = {
         "logreg_tfidf": Pipeline(
             [
-                ("tfidf", TfidfVectorizer(max_features=5000, ngram_range=(1, 2))),
-                ("clf", LogisticRegression(max_iter=2000, class_weight="balanced")),
+                ("tfidf", TfidfVectorizer(max_features=4000, ngram_range=(1, 2), min_df=2, sublinear_tf=True)),
+                ("clf", LogisticRegression(max_iter=2500, class_weight="balanced", C=0.35, solver="saga")),
             ]
         ),
         "linear_svc_tfidf": Pipeline(
             [
-                ("tfidf", TfidfVectorizer(max_features=5000, ngram_range=(1, 2))),
-                ("clf", CalibratedClassifierCV(LinearSVC(class_weight="balanced", random_state=42))),
+                ("tfidf", TfidfVectorizer(max_features=4000, ngram_range=(1, 2), min_df=2, sublinear_tf=True)),
+                ("clf", CalibratedClassifierCV(LinearSVC(class_weight="balanced", random_state=42, C=0.35, max_iter=4000))),
             ]
         ),
         "rf_tfidf": Pipeline(
             [
-                ("tfidf", TfidfVectorizer(max_features=3000)),
-                ("clf", RandomForestClassifier(n_estimators=250, random_state=42, class_weight="balanced")),
+                ("tfidf", TfidfVectorizer(max_features=2500, min_df=2, sublinear_tf=True)),
+                (
+                    "clf",
+                    RandomForestClassifier(
+                        n_estimators=180,
+                        random_state=42,
+                        class_weight="balanced",
+                        max_depth=14,
+                        min_samples_leaf=4,
+                        max_features="sqrt",
+                    ),
+                ),
             ]
         ),
         "nb_tfidf": Pipeline(
             [
-                ("tfidf", TfidfVectorizer(max_features=6000)),
-                ("clf", MultinomialNB()),
+                ("tfidf", TfidfVectorizer(max_features=5000, min_df=2, sublinear_tf=True)),
+                ("clf", MultinomialNB(alpha=0.35)),
             ]
         ),
         "extra_trees_tfidf": Pipeline(
             [
-                ("tfidf", TfidfVectorizer(max_features=4000, ngram_range=(1, 2))),
-                ("clf", ExtraTreesClassifier(n_estimators=200, random_state=42, class_weight="balanced")),
+                ("tfidf", TfidfVectorizer(max_features=3200, ngram_range=(1, 2), min_df=2, sublinear_tf=True)),
+                (
+                    "clf",
+                    ExtraTreesClassifier(
+                        n_estimators=160,
+                        random_state=42,
+                        class_weight="balanced",
+                        max_depth=16,
+                        min_samples_leaf=4,
+                        max_features="sqrt",
+                    ),
+                ),
             ]
         ),
     }
@@ -101,7 +128,7 @@ def main() -> None:
     rows = []
     best_name = None
     best_score = -1.0
-    best_model = None
+    best_key = None
     for name, model in models.items():
         mdl = clone(model)
         mdl.fit(x_train, y_train)
@@ -110,19 +137,27 @@ def main() -> None:
         m = multiclass_metrics_extended(y_test, y_pred, y_proba)
         m["latency_ms"] = measure_latency_ms(mdl.predict, x_train.iloc[:1], repeats=50)
         m["model"] = name
+        m["eval_split"] = "group_holdout_platform"
         cv_stats = cross_val_mean_std_multiclass(clone(model), x_train, y_train, cv=3)
         m.update(cv_stats)
         rows.append(m)
         if m["macro_f1"] > best_score:
             best_score = m["macro_f1"]
             best_name = name
-            best_model = mdl
+            best_key = name
 
     metrics = pd.DataFrame(rows).sort_values("macro_f1", ascending=False)
     metrics.to_csv(REPORTS_DIR / "metrics_router.csv", index=False, encoding="utf-8-sig")
 
-    if best_model is not None:
-        y_pred_best = best_model.predict(x_test)
+    if best_key is None and len(metrics):
+        best_key = str(metrics.iloc[0]["model"])
+        best_name = best_key
+        best_score = float(metrics.iloc[0]["macro_f1"])
+
+    eval_model = clone(models[best_key]) if best_key else None
+    if eval_model is not None:
+        eval_model.fit(x_train, y_train)
+        y_pred_best = eval_model.predict(x_test)
         per_class = per_class_classification_df(y_test, y_pred_best, class_names)
         per_class.to_csv(REPORTS_DIR / "metrics_router_per_class.csv", index=False, encoding="utf-8-sig")
         labels_idx = list(range(len(class_names)))
@@ -131,23 +166,27 @@ def main() -> None:
             cm,
             [str(c)[:24] for c in class_names],
             ML_FIGURES_DIR / "router_confusion_matrix.png",
-            "Router — confusion matrix (holdout)",
+            "Router — confusion matrix (platform group holdout)",
         )
 
     save_model_comparison_bars(
         metrics,
         [c for c in ["macro_f1", "weighted_f1", "accuracy", "balanced_accuracy", "roc_auc_ovr", "cv_f1_macro_mean"] if c in metrics.columns],
         ML_FIGURES_DIR / "router_model_comparison.png",
-        "Router models — macro/weighted F1, accuracy, and CV stability",
+        "Router models — group holdout + regularisation",
     )
 
-    joblib.dump({"model": best_model, "classes": class_names}, MODELS_DIR / "router_model.pkl")
+    production = clone(models[best_key]) if best_key else None
+    if production is None:
+        raise RuntimeError("Router: no candidate model selected.")
+    production.fit(text_f, y_f)
+    joblib.dump({"model": production, "classes": class_names}, MODELS_DIR / "router_model.pkl")
 
-    pred = best_model.predict(text)
+    pred = production.predict(text)
     out = df.copy()
     out["route_category"] = pd.Series(pred).map(lambda i: class_names[int(i)] if int(i) < len(class_names) else "Other")
-    if hasattr(best_model, "predict_proba"):
-        out["route_confidence"] = best_model.predict_proba(text).max(axis=1)
+    if hasattr(production, "predict_proba"):
+        out["route_confidence"] = production.predict_proba(text).max(axis=1)
     else:
         out["route_confidence"] = 0.5
     out.to_csv(DATA_DIR / "final_reviews_routed.csv", index=False, encoding="utf-8-sig")

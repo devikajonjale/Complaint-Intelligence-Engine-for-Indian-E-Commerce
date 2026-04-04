@@ -1,27 +1,27 @@
 {
   "severity": {
-    "selected_model": "logreg",
-    "primary_metric": 1.0,
+    "selected_model": "linear_svc_calibrated",
+    "primary_metric": 0.8652753385277955,
     "metrics_file": "reports/metrics_severity.csv"
   },
   "router": {
     "selected_model": "linear_svc_tfidf",
-    "primary_metric": 0.9364951972691911,
+    "primary_metric": 0.8858371699748268,
     "metrics_file": "reports/metrics_router.csv"
   },
   "churn": {
-    "selected_model": "gradient_boosting",
+    "selected_model": "random_forest",
     "primary_metric": 1.0,
     "metrics_file": "reports/metrics_churn.csv"
   },
   "response_generation": {
-    "selected_model": "template_v3",
-    "primary_metric": 0.5904149882748494,
+    "selected_model": "template_v1",
+    "primary_metric": 0.5856223424757696,
     "metrics_file": "reports/metrics_response.csv"
   },
   "drift": {
     "selected_model": "weekly_centroid_plus_js",
-    "primary_metric": 0.14814814814814814,
+    "primary_metric": 0.2222222222222222,
     "metrics_file": "reports/metrics_drift.csv"
   }
 }
