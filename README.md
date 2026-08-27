@@ -77,6 +77,53 @@ How to Use This App, Live Pulse, Complaint Landscape, Spike Tracker, Critical Al
 
 A typical 15 minute ops review: spot a jump in Tier 1 alerts, confirm the spike is statistically real, read the top critical reviews, route one to the owning team, pull the high churn risk users behind it, draft a response, and check whether drift confirms a new sub-issue.
 
+## Screenshots
+
+<table>
+<tr>
+<td width="50%">
+
+**Live Pulse**<br>KPI overview and complaint volume by platform and cluster
+<img src="figures/dashboard/live_pulse.png" width="100%">
+
+</td>
+<td width="50%">
+
+**Severity Triage**<br>Complaints ranked by ML severity score with an adjustable alert threshold
+<img src="figures/dashboard/severity_triage.png" width="100%">
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Churn Risk**<br>Churn score distribution and the high-risk user watchlist
+<img src="figures/dashboard/churn_risk.png" width="100%">
+
+</td>
+<td width="50%">
+
+**Auto-Responder**<br>Generated reply options with quality scores for a pasted complaint
+<img src="figures/dashboard/auto_responder.png" width="100%">
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**UMAP cluster projection**<br>Discovered complaint archetypes in the reduced embedding space
+<img src="figures/chart_13_umap.png" width="100%">
+
+</td>
+<td width="50%">
+
+**Router confusion matrix**<br>LinearSVC routing accuracy on a platform group holdout
+<img src="reports/ml_figures/router_confusion_matrix.png" width="100%">
+
+</td>
+</tr>
+</table>
+
 ## Tech stack
 
 Python, pandas, NumPy, SciPy, scikit-learn, sentence-transformers, PyTorch, langdetect, umap-learn, hdbscan, joblib, Streamlit, Plotly, matplotlib, seaborn, google-play-scraper, praw. Everything is open source and pip installable, and the core pipeline needs no paid keys.
