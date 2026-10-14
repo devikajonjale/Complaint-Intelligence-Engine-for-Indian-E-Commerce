@@ -207,6 +207,39 @@ python rag/evaluate.py --compare                       # no API key needed
 python -m pytest tests -q
 ```
 
+### Deploy on Streamlit Community Cloud
+
+The repo is ready to deploy. The FAISS index is committed, so the app serves queries without
+rebuilding it, and `requirements.txt` pins CPU-only PyTorch because the default Linux wheel pulls
+about 2.5 GB of CUDA dependencies that will not fit in a free container.
+
+1. Push this branch and sign in at [share.streamlit.io](https://share.streamlit.io) with GitHub.
+2. Create an app pointing at this repository, the branch you want, and `app.py` as the entry point.
+3. Open Advanced settings, choose Python 3.11, and paste into Secrets:
+
+   ```toml
+   GROQ_API_KEY = "your_free_groq_key"
+   CIE_DISABLE_PIPELINE_REFRESH = "1"
+   RAG_ENABLE_RERANK = "0"
+   ```
+
+4. Deploy. The first build takes several minutes because PyTorch and the dependency tree install
+   from scratch.
+
+What changes in a hosted deployment:
+
+* **Reranking is hidden.** Its weights are a 464 MB download, so only `hybrid` and `dense` appear.
+  Retrieval quality therefore matches the `hybrid` column in the table above, not `rerank`.
+* **The pipeline refresh button is disabled.** Re-running it would scrape the Play Store and retrain
+  every model inside the container, hanging the app for everyone.
+* **First query is slow.** The Sentence-BERT model (about 450 MB) downloads on first use, then stays
+  cached while the container lives.
+* **Memory is tight.** The free tier gives roughly 1 GB, and the embedding model plus the dashboard
+  sit close to it. If the app restarts under load, that is the cause.
+
+Secrets never belong in the repo: `.streamlit/secrets.toml` and `.env` are both gitignored, and
+`.streamlit/secrets.toml.example` shows the expected keys.
+
 ### Tests and CI
 
 `tests/` holds 30 tests covering the tokenizer, metadata filtering, RRF fusion, citation parsing, metric maths

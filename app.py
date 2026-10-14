@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -13,6 +14,25 @@ import warnings
 warnings.filterwarnings("ignore")
 
 st.set_page_config(page_title="Complaint Intelligence Engine+", layout="wide")
+
+
+def _secrets_to_env() -> None:
+    """Expose Streamlit secrets as environment variables.
+
+    The RAG layer reads plain environment variables (GROQ_API_KEY and friends) so that the CLI
+    scripts work outside Streamlit. On Streamlit Community Cloud those values arrive through
+    st.secrets instead, so copy them across once at startup. Existing environment variables win,
+    which keeps a local .env authoritative during development.
+    """
+    try:
+        for key, value in st.secrets.items():
+            if isinstance(value, str) and key not in os.environ:
+                os.environ[key] = value
+    except Exception:  # no secrets file configured, which is normal locally
+        pass
+
+
+_secrets_to_env()
 
 DATA_DIR     = Path("data")
 REPORTS_DIR  = Path("reports")
@@ -51,6 +71,15 @@ def load_data():
         df["tsne_y"] = 0.0
     df["at"] = pd.to_datetime(df["at"], errors="coerce", utc=True)
     return df, spike
+
+
+def pipeline_refresh_enabled() -> bool:
+    """Hosted deployments set CIE_DISABLE_PIPELINE_REFRESH=1.
+
+    Re-running the pipeline scrapes the Play Store and retrains every model, which exceeds the
+    resources of a free hosted container and would hang the app for all visitors.
+    """
+    return os.getenv("CIE_DISABLE_PIPELINE_REFRESH", "0").strip() not in ("1", "true", "yes")
 
 
 def run_refresh():
@@ -236,7 +265,9 @@ with st.sidebar:
 
     st.markdown("---")
     st.header("Global Filters")
-    if st.button("Refresh Full Pipeline"):
+    if not pipeline_refresh_enabled():
+        st.caption("Pipeline refresh is disabled on this hosted deployment. Run it locally instead.")
+    elif st.button("Refresh Full Pipeline"):
         with st.spinner("Running full pipeline including ML extension modules..."):
             result = run_refresh()
         if result.returncode == 0:

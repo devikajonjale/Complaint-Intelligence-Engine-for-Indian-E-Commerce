@@ -7,6 +7,6 @@ __pycache__/
 #models/
 .streamlit/secrets.toml
 
-# RAG layer: the FAISS index is rebuilt from data/embeddings.npy by rag/build_index.py
-rag/index/
+# RAG layer: generated briefs are disposable. The FAISS index IS committed, so a hosted
+# deployment (Streamlit Community Cloud) can serve queries without rebuilding it at startup.
 rag/reports/
