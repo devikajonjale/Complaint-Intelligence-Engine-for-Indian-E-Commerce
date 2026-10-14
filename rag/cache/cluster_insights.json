@@ -1,0 +1,431 @@
+{
+  "kmeans_0": {
+    "algorithm": "kmeans",
+    "cluster_id": 0,
+    "pipeline_name": "Delivery Failure",
+    "complaint_focused": true,
+    "label": "Delivery Failure & Cancellations",
+    "summary": "Customers report frequent delivery delays, cancellations, and wrong items. They also complain about lack of customer support and misleading delivery status updates.",
+    "root_causes": [
+      "Delayed delivery schedule",
+      "Incorrect item dispatch",
+      "Poor communication with customers"
+    ],
+    "owning_team": "Delivery Failure",
+    "stats": {
+      "size": 663,
+      "share_pct": 29.6,
+      "avg_rating": 1.92,
+      "anomalies": 28,
+      "red_severity": 3,
+      "top_platforms": {
+        "Amazon India": 300,
+        "Myntra": 101,
+        "Nykaa": 96
+      },
+      "top_routing_team": "Delivery Failure",
+      "complaints_1_2_star": 503
+    },
+    "representative_ids": [
+      "R1176",
+      "R1759",
+      "R1909",
+      "R0141",
+      "R1287",
+      "R1611",
+      "R1262",
+      "R0730",
+      "R1799",
+      "R1937",
+      "R1109",
+      "R1760"
+    ],
+    "signature": "90e13064a7a7f2aea17ce01ea6b51781"
+  },
+  "kmeans_1": {
+    "algorithm": "kmeans",
+    "cluster_id": 1,
+    "pipeline_name": "Refund & Payment Issues",
+    "complaint_focused": true,
+    "label": "High price perception",
+    "summary": "Customers say the products are good but feel the price is too high or the quality is poor for the cost. This price dissatisfaction drives the low ratings in this cluster.",
+    "root_causes": [
+      "Price perceived as too high for product quality",
+      "Misleading product description causing expectation mismatch",
+      "Insufficient discount or promotional offers"
+    ],
+    "owning_team": "Refund & Payment Issues",
+    "stats": {
+      "size": 568,
+      "share_pct": 25.4,
+      "avg_rating": 4.65,
+      "anomalies": 20,
+      "red_severity": 20,
+      "top_platforms": {
+        "Myntra": 210,
+        "Meesho": 121,
+        "Nykaa": 98
+      },
+      "top_routing_team": "Refund & Payment Issues",
+      "complaints_1_2_star": 35
+    },
+    "representative_ids": [
+      "R0511",
+      "R0979",
+      "R2023",
+      "R1348",
+      "R1479",
+      "R1387",
+      "R1380",
+      "R1687",
+      "R1368",
+      "R0936",
+      "R0349",
+      "R0562"
+    ],
+    "signature": "29b76285d2b3483c620b2cb207af70ca"
+  },
+  "kmeans_2": {
+    "algorithm": "kmeans",
+    "cluster_id": 2,
+    "pipeline_name": "Fake/Counterfeit Product",
+    "complaint_focused": true,
+    "label": "Delivery & App Issues",
+    "summary": "Customers complain that the app frequently crashes and that deliveries are often delayed beyond the promised time. They also report that product quality does not match the description, leading to dissatisfaction.",
+    "root_causes": [
+      "Delayed deliveries beyond promised time",
+      "App crashes and freezes",
+      "Product quality not as described"
+    ],
+    "owning_team": "Fake/Counterfeit Product",
+    "stats": {
+      "size": 453,
+      "share_pct": 20.2,
+      "avg_rating": 4.79,
+      "anomalies": 8,
+      "red_severity": 0,
+      "top_platforms": {
+        "Myntra": 162,
+        "Meesho": 127,
+        "Amazon India": 63
+      },
+      "top_routing_team": "Fake/Counterfeit Product",
+      "complaints_1_2_star": 11
+    },
+    "representative_ids": [
+      "R2202",
+      "R1834",
+      "R0841",
+      "R1169",
+      "R2165",
+      "R0785",
+      "R1774",
+      "R2225",
+      "R0099",
+      "R0592",
+      "R1027"
+    ],
+    "signature": "aa3f310236778f3ca9356dca1c78cb8f"
+  },
+  "kmeans_3": {
+    "algorithm": "kmeans",
+    "cluster_id": 3,
+    "pipeline_name": "App Crash / UX Bug",
+    "complaint_focused": true,
+    "label": "Account & UPI Issues",
+    "summary": "Customers report that they cannot create or set up accounts and that UPI does not link to their bank, causing frustration. The app’s unstable behavior and confusing interface are the main culprits behind these complaints.",
+    "root_causes": [
+      "App crashes during account creation",
+      "UPI integration fails",
+      "Poor navigation confusing users"
+    ],
+    "owning_team": "App Crash / UX Bug",
+    "stats": {
+      "size": 556,
+      "share_pct": 24.8,
+      "avg_rating": 3.8,
+      "anomalies": 56,
+      "red_severity": 2,
+      "top_platforms": {
+        "Meesho": 181,
+        "Amazon India": 128,
+        "Flipkart": 87
+      },
+      "top_routing_team": "App Crash / UX Bug",
+      "complaints_1_2_star": 154
+    },
+    "representative_ids": [
+      "R2068",
+      "R1000",
+      "R0329",
+      "R2043",
+      "R2208",
+      "R0781",
+      "R2066",
+      "R0994",
+      "R2085",
+      "R1229",
+      "R0474",
+      "R0859"
+    ],
+    "signature": "d4a96c6a3580235f72979043d922a1c2"
+  },
+  "hdbscan_0": {
+    "algorithm": "hdbscan",
+    "cluster_id": 0,
+    "pipeline_name": null,
+    "complaint_focused": true,
+    "label": "Delivery Cancellations and Delays",
+    "summary": "Customers report frequent cancellations and late deliveries, often with no clear explanation. Many complain that items are marked delivered without arrival, and returns or refunds are delayed or denied.",
+    "root_causes": [
+      "Logistics partner inefficiency",
+      "Order cancellation policy confusion",
+      "Poor communication with customers"
+    ],
+    "owning_team": "Delivery Failure",
+    "stats": {
+      "size": 666,
+      "share_pct": 29.7,
+      "avg_rating": 1.94,
+      "anomalies": 25,
+      "red_severity": 0,
+      "top_platforms": {
+        "Amazon India": 295,
+        "Myntra": 107,
+        "Nykaa": 97
+      },
+      "top_routing_team": "Delivery Failure",
+      "complaints_1_2_star": 502
+    },
+    "representative_ids": [
+      "R1176",
+      "R1759",
+      "R1909",
+      "R1287",
+      "R0141",
+      "R1611",
+      "R1262",
+      "R0730",
+      "R1725",
+      "R1799",
+      "R1937",
+      "R1109"
+    ],
+    "signature": "bcaa294d2289f57962603afa969e1ad0"
+  },
+  "hdbscan_1": {
+    "algorithm": "hdbscan",
+    "cluster_id": 1,
+    "pipeline_name": null,
+    "complaint_focused": true,
+    "label": "UPI and Account Setup Failures",
+    "summary": "Customers report that the app fails to link UPI accounts and cannot complete account setup, causing frustration during payment and loan processes. Many also mention that the app crashes or behaves poorly during checkout, leading to abandoned orders and negative experiences.",
+    "root_causes": [
+      "UPI integration failure",
+      "Account creation bug",
+      "App crashes during checkout"
+    ],
+    "owning_team": "App Crash / UX Bug",
+    "stats": {
+      "size": 551,
+      "share_pct": 24.6,
+      "avg_rating": 3.8,
+      "anomalies": 54,
+      "red_severity": 0,
+      "top_platforms": {
+        "Meesho": 180,
+        "Amazon India": 126,
+        "Flipkart": 88
+      },
+      "top_routing_team": "App Crash / UX Bug",
+      "complaints_1_2_star": 152
+    },
+    "representative_ids": [
+      "R2068",
+      "R1000",
+      "R0329",
+      "R2043",
+      "R2208",
+      "R0781",
+      "R2066",
+      "R0994",
+      "R2085",
+      "R1229",
+      "R0474",
+      "R0859"
+    ],
+    "signature": "d4a96c6a3580235f72979043d922a1c2"
+  },
+  "hdbscan_2": {
+    "algorithm": "hdbscan",
+    "cluster_id": 2,
+    "pipeline_name": null,
+    "complaint_focused": false,
+    "label": "Product Satisfaction",
+    "summary": "Customers consistently praise the product as very good and satisfactory. The reviews highlight overall quality and positive experience with the item.",
+    "root_causes": [
+      "High product quality",
+      "Excellent packaging",
+      "Positive user experience"
+    ],
+    "owning_team": "Other",
+    "stats": {
+      "size": 205,
+      "share_pct": 9.2,
+      "avg_rating": 4.73,
+      "anomalies": 0,
+      "red_severity": 0,
+      "top_platforms": {
+        "Flipkart": 51,
+        "Meesho": 48,
+        "Myntra": 46
+      },
+      "top_routing_team": "Refund & Payment Issues",
+      "complaints_1_2_star": 9
+    },
+    "representative_ids": [
+      "R0954",
+      "R0910",
+      "R0511",
+      "R0452",
+      "R0361",
+      "R0454",
+      "R0957",
+      "R1603",
+      "R0979",
+      "R2106",
+      "R2095",
+      "R0911"
+    ],
+    "signature": "024f29f8863969aecb28eb06cb85a124"
+  },
+  "hdbscan_3": {
+    "algorithm": "hdbscan",
+    "cluster_id": 3,
+    "pipeline_name": null,
+    "complaint_focused": true,
+    "label": "Price Discrepancy",
+    "summary": "Customers complain that prices are too high or change after adding items to the cart. They also report missing discounts and inconsistent pricing between the product listing and checkout.",
+    "root_causes": [
+      "Dynamic price changes after cart addition",
+      "Missing or incorrect discount application",
+      "Inconsistent pricing between product page and checkout"
+    ],
+    "owning_team": "Refund & Payment Issues",
+    "stats": {
+      "size": 188,
+      "share_pct": 8.4,
+      "avg_rating": 4.61,
+      "anomalies": 0,
+      "red_severity": 0,
+      "top_platforms": {
+        "Myntra": 79,
+        "Meesho": 40,
+        "Nykaa": 40
+      },
+      "top_routing_team": "Refund & Payment Issues",
+      "complaints_1_2_star": 13
+    },
+    "representative_ids": [
+      "R0562",
+      "R0256",
+      "R0349",
+      "R1370",
+      "R1171",
+      "R0477",
+      "R0368",
+      "R0391",
+      "R1261",
+      "R1468",
+      "R0638",
+      "R1819"
+    ],
+    "signature": "d3dd1a1cc7633bdbee8da035a5c280d5"
+  },
+  "hdbscan_4": {
+    "algorithm": "hdbscan",
+    "cluster_id": 4,
+    "pipeline_name": null,
+    "complaint_focused": false,
+    "label": "User Experience",
+    "summary": "Customers praise the app for its ease of use and smooth shopping experience. They highlight its intuitive interface and quick loading as key strengths.",
+    "root_causes": [
+      "Intuitive UI design",
+      "Fast loading times",
+      "Easy navigation"
+    ],
+    "owning_team": "Other",
+    "stats": {
+      "size": 166,
+      "share_pct": 7.4,
+      "avg_rating": 4.84,
+      "anomalies": 3,
+      "red_severity": 0,
+      "top_platforms": {
+        "Myntra": 64,
+        "Meesho": 52,
+        "Amazon India": 23
+      },
+      "top_routing_team": "Fake/Counterfeit Product",
+      "complaints_1_2_star": 2
+    },
+    "representative_ids": [
+      "R0133",
+      "R1885",
+      "R0514",
+      "R0071",
+      "R0746",
+      "R0566",
+      "R1530",
+      "R0289",
+      "R0553",
+      "R0105",
+      "R0201",
+      "R0230"
+    ],
+    "signature": "0a514b4cfdf6b092379d9c136ba84505"
+  },
+  "hdbscan_5": {
+    "algorithm": "hdbscan",
+    "cluster_id": 5,
+    "pipeline_name": null,
+    "complaint_focused": false,
+    "label": "App Satisfaction",
+    "summary": "Customers praise the app as very good, nice, and wonderful. They highlight its overall quality and positive experience.",
+    "root_causes": [
+      "User-friendly interface",
+      "Smooth performance",
+      "Valuable features"
+    ],
+    "owning_team": "Other",
+    "stats": {
+      "size": 174,
+      "share_pct": 7.8,
+      "avg_rating": 4.79,
+      "anomalies": 5,
+      "red_severity": 0,
+      "top_platforms": {
+        "Meesho": 52,
+        "Myntra": 50,
+        "Amazon India": 29
+      },
+      "top_routing_team": "Fake/Counterfeit Product",
+      "complaints_1_2_star": 4
+    },
+    "representative_ids": [
+      "R0006",
+      "R0104",
+      "R0721",
+      "R2160",
+      "R1584",
+      "R1469",
+      "R1968",
+      "R0833",
+      "R0612",
+      "R1617",
+      "R0766",
+      "R0210"
+    ],
+    "signature": "79bca41c5d4a69144ec52579eebcb24a"
+  }
+}
