@@ -1,0 +1,62 @@
+# Tests the RAG layer without any API key: builds the FAISS index from the committed embeddings,
+# runs the unit tests, then scores retrieval only (no LLM calls, so nothing here can incur cost).
+name: RAG CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Cache Hugging Face models
+        uses: actions/cache@v4
+        with:
+          # The Sentence-BERT model is ~450 MB; caching keeps later runs fast.
+          path: ~/.cache/huggingface
+          key: hf-${{ runner.os }}-paraphrase-multilingual-MiniLM-L12-v2
+
+      - name: Install dependencies
+        # Only what the RAG layer needs. The upstream pipeline's scrapers and plotting stack are not
+        # exercised here, and umap/hdbscan would add several minutes of build time.
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas numpy scikit-learn sentence-transformers faiss-cpu rank-bm25 \
+            langchain langchain-core langchain-community langchain-huggingface langchain-groq \
+            pydantic python-dotenv pytest
+
+      - name: Build FAISS index
+        run: python rag/build_index.py
+
+      - name: Index build is idempotent
+        run: |
+          python rag/build_index.py | tee second_build.log
+          grep -q "up to date" second_build.log
+
+      - name: Unit tests
+        run: python -m pytest tests -q
+
+      - name: Retrieval evaluation (no API key, no LLM calls)
+        run: python rag/evaluate.py --retrieval-only
+
+      - name: Retrieval variant comparison
+        run: python rag/evaluate.py --compare
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-results
+          path: |
+            rag/eval_results.json
+            rag/eval_variants.json

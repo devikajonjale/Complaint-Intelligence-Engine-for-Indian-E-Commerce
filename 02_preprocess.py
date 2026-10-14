@@ -123,13 +123,7 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
     df["year_month"] = df["at"].dt.to_period("M").astype(str)
 
     # -- Combined text field used for TF-IDF and embeddings
-    # For Google Play: use content only
-    # For Reddit: first 300 chars to avoid very long posts dominating
-    df["text_for_model"] = df.apply(
-        lambda r: r["cleaned_content"][:300] if r["source"] == "reddit"
-        else r["cleaned_content"],
-        axis=1
-    )
+    df["text_for_model"] = df["cleaned_content"]
 
     log.info(f"  Hinglish reviews: {df['is_hinglish'].sum()} ({df['is_hinglish'].mean()*100:.1f}%)")
     log.info(f"  Language distribution:\n{df['detected_lang'].value_counts().head(8).to_string()}")

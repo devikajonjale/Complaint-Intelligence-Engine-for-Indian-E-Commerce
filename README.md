@@ -21,15 +21,15 @@ Indian e-commerce platforms take in millions of reviews a year covering delivery
 
 ## Data
 
-Live Google Play Store reviews via `google-play-scraper` (no API key) across Myntra, Meesho, Nykaa, Flipkart and Amazon India, in English and Hindi, country set to India. Reddit ingestion via PRAW is optional and needs credentials in `.env`.
+Live Google Play Store reviews via `google-play-scraper` (no API key) across Myntra, Meesho, Nykaa, Flipkart and Amazon India, in English and Hindi, country set to India.
 
 | Stage | Count |
 |---|---|
 | Reviews fetched | 4,768 |
-| After merge and clean | 2,389 |
-| Final corpus after dedup | 2,253 |
-| Hinglish reviews detected | 196 (~8.7%) |
-| SBERT embeddings | (2,253, 384) |
+| After merge and clean | 2,387 |
+| Final corpus after dedup | 2,240 |
+| Hinglish reviews detected | 202 (~9.0%) |
+| SBERT embeddings | (2,240, 384) |
 
 ## Pipeline
 
@@ -67,13 +67,13 @@ From one documented run. Re-running on fresh reviews changes every figure.
 | Response | template_v3 | Mean quality | 0.590 |
 | Drift | Weekly centroid + JS | Alert rate | 4 of 27 weeks |
 
-Clustering: 4 data driven clusters, silhouette 0.12 to 0.25 (normal range for noisy real world review text), K-Means vs HDBSCAN ARI ~0.67, about 113 Tier 1 critical reviews, spike detection false positive rate ~1.2%.
+Clustering: 4 data driven clusters, silhouette 0.12 to 0.25 (normal range for noisy real world review text), K-Means vs HDBSCAN ARI ~0.67, 25 Tier 1 critical reviews out of 112 flagged by Isolation Forest, spike detection false positive rate ~1.2%.
 
 \* The near perfect severity and churn scores come from weak label and feature alignment, not from genuine difficulty. Treat them as a sanity check on the labelling rules rather than as generalisation estimates.
 
 ## Dashboard
 
-How to Use This App, Live Pulse, Complaint Landscape, Spike Tracker, Critical Alerts, Severity Triage, Complaint Router, Churn Risk, Auto-Responder, Drift Monitor, and Pipeline & ML figures. Global filters for platform, star bucket and date range, and a button that re-runs the full pipeline and clears cache.
+How to Use This App, Live Pulse, Complaint Landscape, Spike Tracker, Critical Alerts, Severity Triage, Complaint Router, Churn Risk, Auto-Responder, Drift Monitor, Pipeline & ML figures, Ask the Complaints (RAG), and LLM Cluster Insights. Global filters for platform, star bucket and date range, and a button that re-runs the full pipeline and clears cache.
 
 A typical 15 minute ops review: spot a jump in Tier 1 alerts, confirm the spike is statistically real, read the top critical reviews, route one to the owning team, pull the high churn risk users behind it, draft a response, and check whether drift confirms a new sub-issue.
 
@@ -124,9 +124,98 @@ A typical 15 minute ops review: spot a jump in Tier 1 alerts, confirm the spike 
 </tr>
 </table>
 
+## GenAI layer: RAG over the complaints
+
+A retrieval augmented layer that answers free-form analyst questions directly from the review corpus,
+citing the reviews it used. It reuses the exact Sentence-BERT vectors from `03_embed.py`, so retrieval,
+clustering and anomaly detection share one embedding space. Everything runs free: Groq's free tier for
+the LLM, local CPU for embedding and reranking.
+
+```mermaid
+flowchart LR
+    A[data/final_reviews_*.csv] --> B[rag/build_index.py]
+    E[data/embeddings.npy<br/>paraphrase-multilingual-MiniLM-L12-v2] --> B
+    B --> F[(FAISS index + metadata:<br/>platform, rating, date, cluster,<br/>severity, anomaly, team)]
+    A --> K[BM25 lexical index]
+    Q[Question + filters] --> CD[Condense follow-up<br/>from chat history]
+    CD --> F
+    CD --> K
+    F -->|dense top 40| RRF[Reciprocal Rank Fusion]
+    K -->|BM25 top 40| RRF
+    RRF --> X[Cross-encoder rerank<br/>local CPU, optional]
+    X -->|top k, R#### ids| P[Grounded prompt:<br/>cite ids or refuse]
+    P --> L{{Groq gpt-oss-20b}}
+    L -->|streamed| O[Answer + cited sources]
+    A --> C[rag/cluster_insights.py] --> L
+    L --> J[(cluster_insights.json)]
+    J --> G[rag/report.py<br/>executive brief]
+    O --> S[Streamlit: Ask the Complaints]
+    J --> T[Streamlit: LLM Cluster Insights]
+```
+
+### Retrieval
+
+Three strategies, selectable per query in the dashboard, with `RAG_RETRIEVER` in `.env`, or `--variant`:
+
+| Variant | Ranking | Role |
+|---|---|---|
+| `dense` | FAISS cosine over Sentence-BERT vectors | Baseline, fastest |
+| `hybrid` (default) | Dense and BM25 fused by Reciprocal Rank Fusion | Recovers exact tokens such as COD, OTP and UPI that embeddings blur, and tolerates Hinglish spelling variants |
+| `rerank` | Hybrid shortlist of 40 re-scored by a multilingual cross-encoder | Best ranking, adds local CPU time, no API calls |
+
+RRF fuses ranks rather than scores, because cosine similarity and BM25 occupy different scales. Metadata
+filters are applied before ranking, so all three search the same subset.
+
+### Measured results
+
+Retrieval, scored on 26 questions over the 2,240 review corpus against pooled judge-labelled ground truth (`python rag/evaluate.py --compare`,
+no LLM calls involved):
+
+| Metric | dense | hybrid | rerank |
+|---|---|---|---|
+| Hit rate@1 | 0.5 | 0.615 | **0.692** |
+| Hit rate@5 | 0.846 | 0.846 | **0.923** |
+| MRR@8 | 0.634 | 0.718 | **0.771** |
+| Precision@5 | 0.469 | 0.485 | **0.538** |
+| Recall@8 | **0.499** | 0.453 | 0.487 |
+| Latency p50 | 41 ms | 43 ms | 1.875 s |
+
+Answer quality, hybrid retrieval, answer model `openai/gpt-oss-20b`, independent judge `openai/gpt-oss-120b`:
+
+| Metric | Value |
+|---|---|
+| Faithfulness (judge, 1 to 5) | 4.65 (91% scored 4 or 5) |
+| Answer relevance (judge, 1 to 5) | 4.87 |
+| Answers with citations / valid citation ids | 100% / 100% |
+| Correct refusals on out of corpus questions | 100% (4/4) |
+| False refusals on answerable questions | 11.5% |
+| End to end latency median / mean / p95 | 3.02 s / 4.639 s / 12.697 s |
+
+Caveats: 25 of the 26 scored questions use pooled judge labels and 1 falls back to keywords. Recall is low in
+absolute terms because several questions have more than 8 relevant reviews while only 8 reach the prompt, so
+hit rate and MRR are the meaningful metrics here. The p95 latency reflects free-tier rate-limit backoff. An LLM judge approximates human evaluation, which is why the judge is a larger, different model.
+
+Per question results are in `rag/eval_results.json`, variants in `rag/eval_variants.json`, labels in
+`rag/eval_labels.json`.
+
+### Commands
+
+```bash
+python rag/chain.py "Why are refunds delayed?" --platform Meesho --variant rerank
+python rag/report.py --platform Flipkart --days 30     # writes rag/reports/*.md
+python rag/evaluate.py --compare                       # no API key needed
+python -m pytest tests -q
+```
+
+### Tests and CI
+
+`tests/` holds 30 tests covering the tokenizer, metadata filtering, RRF fusion, citation parsing, metric maths
+and retry logic. None call an LLM. `.github/workflows/ci.yml` builds the index, checks the build is idempotent,
+runs the tests and scores retrieval, all without an API key, so CI cannot incur cost.
+
 ## Tech stack
 
-Python, pandas, NumPy, SciPy, scikit-learn, sentence-transformers, PyTorch, langdetect, umap-learn, hdbscan, joblib, Streamlit, Plotly, matplotlib, seaborn, google-play-scraper, praw. Everything is open source and pip installable, and the core pipeline needs no paid keys.
+Python, pandas, NumPy, SciPy, scikit-learn, sentence-transformers, PyTorch, langdetect, umap-learn, hdbscan, joblib, Streamlit, Plotly, matplotlib, seaborn, google-play-scraper, LangChain, FAISS, rank-bm25, pydantic and pytest. Everything is open source and pip installable. The core pipeline needs no keys, and the GenAI layer runs on a free Groq key plus local CPU models.
 
 ## Setup
 
@@ -136,10 +225,15 @@ source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
 python run_pipeline.py           # first run takes 8-12 min on CPU
-streamlit run app.py
+
+cp .env.example .env             # add a free GROQ_API_KEY from console.groq.com
+python rag/build_index.py        # build the FAISS index (about 30 seconds)
+python rag/cluster_insights.py   # generate LLM cluster labels
+
+streamlit run app.py             # opens http://localhost:8501
 ```
 
-For Reddit ingestion, add `REDDIT_CLIENT_ID` and `REDDIT_CLIENT_SECRET` to a `.env` file. For Streamlit Community Cloud, set the same values as secrets.
+For the GenAI layer, add a free `GROQ_API_KEY` to a `.env` file (see the GenAI section). For Streamlit Community Cloud, set the same value as a secret.
 
 ## Limitations
 
