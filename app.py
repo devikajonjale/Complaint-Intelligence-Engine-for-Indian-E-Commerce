@@ -229,6 +229,8 @@ with st.sidebar:
             "Auto-Responder",
             "Drift Monitor",
             "Pipeline & ML figures",
+            "Ask the Complaints (RAG)",
+            "LLM Cluster Insights",
         ],
     )
 
@@ -245,7 +247,8 @@ with st.sidebar:
             st.code(result.stderr or result.stdout)
 
 # ── Load data (skip for guide page so it works even before pipeline runs) ──────
-if module not in ("How to Use This App", "Pipeline & ML figures"):
+GENAI_MODULES = ("Ask the Complaints (RAG)", "LLM Cluster Insights")
+if module not in ("How to Use This App", "Pipeline & ML figures") + GENAI_MODULES:
     df, spike_df = load_data()
     if df is None:
         st.warning("No processed data found. Run `python run_pipeline.py` first, or read the **How to Use This App** guide in the sidebar.")
@@ -273,8 +276,8 @@ if module == "How to Use This App":
     st.caption("Start here. This guide walks you through every module with a concrete example and explains what each output means.")
 
     st.info(
-        "**Tip:** This dashboard works on live data pulled from Google Play reviews (Myntra, Meesho, Nykaa, Flipkart, Amazon India) "
-        "and Reddit. Before exploring any module, make sure the pipeline has run at least once by clicking **Refresh Full Pipeline** "
+        "**Tip:** This dashboard works on live data pulled from Google Play reviews (Myntra, Meesho, Nykaa, Flipkart, Amazon India). "
+        "Before exploring any module, make sure the pipeline has run at least once by clicking **Refresh Full Pipeline** "
         "in the sidebar, or by running `python run_pipeline.py` in your terminal."
     )
 
@@ -950,3 +953,15 @@ elif module == "Pipeline & ML figures":
             st.info("No ML benchmark PNGs yet.")
     else:
         st.info("Run the pipeline to generate ML figures.")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# GENAI MODULES (RAG Q&A and LLM cluster insights, see rag_ui.py)
+# ══════════════════════════════════════════════════════════════════════════════
+if module in GENAI_MODULES:
+    import rag_ui
+
+    if module == "Ask the Complaints (RAG)":
+        rag_ui.render_rag_chat()
+    else:
+        rag_ui.render_cluster_insights()

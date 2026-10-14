@@ -6,3 +6,7 @@ __pycache__/
 #figures/
 #models/
 .streamlit/secrets.toml
+
+# RAG layer: the FAISS index is rebuilt from data/embeddings.npy by rag/build_index.py
+rag/index/
+rag/reports/

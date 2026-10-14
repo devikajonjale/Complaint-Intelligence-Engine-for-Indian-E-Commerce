@@ -1,0 +1,378 @@
+{
+  "Q01": {
+    "question": "Why are customers not getting their refunds?",
+    "relevant_ids": [
+      "R1842",
+      "R0326",
+      "R1852",
+      "R1196",
+      "R0070",
+      "R0565",
+      "R1937",
+      "R1427",
+      "R0713",
+      "R1737",
+      "R1221",
+      "R1930",
+      "R0207",
+      "R0146"
+    ],
+    "pool_size": 21,
+    "signature": "e0235f825ed6aadcbcfd849da44caf67"
+  },
+  "Q02": {
+    "question": "What are users saying about refunds on Meesho?",
+    "relevant_ids": [
+      "R0619",
+      "R0565",
+      "R0891",
+      "R0794",
+      "R0782"
+    ],
+    "pool_size": 23,
+    "signature": "b962e656171c45c3770a3e13e7061ad3"
+  },
+  "Q03": {
+    "question": "Are there complaints about orders not being delivered on time?",
+    "relevant_ids": [
+      "R1934",
+      "R1779",
+      "R1262",
+      "R0513",
+      "R1212",
+      "R0663",
+      "R1454",
+      "R1884",
+      "R1119",
+      "R1266",
+      "R1859",
+      "R1281",
+      "R1191",
+      "R1846"
+    ],
+    "pool_size": 24,
+    "signature": "ae0213092ee095209b6a877498fcaf12"
+  },
+  "Q04": {
+    "question": "What delivery problems do Flipkart customers report?",
+    "relevant_ids": [
+      "R1472",
+      "R1454",
+      "R1539",
+      "R1611",
+      "R1478",
+      "R1495",
+      "R1498",
+      "R1447"
+    ],
+    "pool_size": 20,
+    "signature": "0c98ad65d43f5d527da67e3cb30b43bf"
+  },
+  "Q05": {
+    "question": "Does the app crash or freeze for users?",
+    "relevant_ids": [
+      "R0710",
+      "R1265",
+      "R1471",
+      "R0024",
+      "R0709",
+      "R0287"
+    ],
+    "pool_size": 22,
+    "signature": "05cce9a6675e9d2b15005e409ee09479"
+  },
+  "Q06": {
+    "question": "Which reviews mention fake or counterfeit products?",
+    "relevant_ids": [
+      "R1194",
+      "R1125",
+      "R1104"
+    ],
+    "pool_size": 27,
+    "signature": "74d421b1640b375d624c6cfac0935ac0"
+  },
+  "Q07": {
+    "question": "Are Nykaa customers complaining about fake cosmetics?",
+    "relevant_ids": [
+      "R1194",
+      "R1125",
+      "R1104"
+    ],
+    "pool_size": 24,
+    "signature": "122c92f51728422198a2da8c51bb958a"
+  },
+  "Q08": {
+    "question": "What do people say about customer care and support?",
+    "relevant_ids": [
+      "R1839",
+      "R1266",
+      "R1867",
+      "R0594",
+      "R1104",
+      "R1096",
+      "R1454",
+      "R1103",
+      "R0300",
+      "R0027",
+      "R1748",
+      "R1786",
+      "R1926",
+      "R1191",
+      "R1908",
+      "R1720",
+      "R1665",
+      "R0052"
+    ],
+    "pool_size": 22,
+    "signature": "dd454cf33764f75dd3ed067f80d14fbb"
+  },
+  "Q09": {
+    "question": "Are there complaints about payment failures or money deducted?",
+    "relevant_ids": [
+      "R1529",
+      "R1418",
+      "R1897",
+      "R0619",
+      "R2131",
+      "R0146",
+      "R1190",
+      "R1845",
+      "R1842"
+    ],
+    "pool_size": 22,
+    "signature": "a64077a5a102fe80cb0ab9b52b1e4dd7"
+  },
+  "Q10": {
+    "question": "Did users receive the wrong or a different product?",
+    "relevant_ids": [
+      "R1759",
+      "R1125",
+      "R1104",
+      "R1937",
+      "R1222",
+      "R0207",
+      "R0253",
+      "R0803",
+      "R1103",
+      "R0073",
+      "R0395",
+      "R1157",
+      "R1979",
+      "R1792",
+      "R1987"
+    ],
+    "pool_size": 21,
+    "signature": "dc89c11955acc12b0e822ba51291380a"
+  },
+  "Q11": {
+    "question": "Do customers report receiving damaged or broken products?",
+    "relevant_ids": [
+      "R0135",
+      "R0008",
+      "R1467",
+      "R1718",
+      "R1702",
+      "R1842",
+      "R1729",
+      "R1720"
+    ],
+    "pool_size": 21,
+    "signature": "1ddde13aff6b3b90a795b231df9bb58b"
+  },
+  "Q12": {
+    "question": "What problems do people face when returning a product?",
+    "relevant_ids": [
+      "R0211",
+      "R0135",
+      "R1852",
+      "R1222",
+      "R1103",
+      "R1776",
+      "R1979",
+      "R0243",
+      "R1937",
+      "R1242",
+      "R0395",
+      "R0794",
+      "R0037",
+      "R1466",
+      "R1702"
+    ],
+    "pool_size": 21,
+    "signature": "94ebf41c7908901a026594c309ee35a4"
+  },
+  "Q13": {
+    "question": "Are customers unhappy with Myntra return pickups?",
+    "relevant_ids": [],
+    "pool_size": 20,
+    "signature": "1f4efa35f999be1df095e0a80ef3a481"
+  },
+  "Q14": {
+    "question": "Are there complaints about cash on delivery?",
+    "relevant_ids": [
+      "R1597",
+      "R2180",
+      "R1231",
+      "R1776",
+      "R1850",
+      "R1799",
+      "R2108",
+      "R2021",
+      "R2224",
+      "R2060",
+      "R1751"
+    ],
+    "pool_size": 18,
+    "signature": "ce744e1eff77b48fd5021d3baa06f9d0"
+  },
+  "Q15": {
+    "question": "What issues do users have with logging in or OTP?",
+    "relevant_ids": [
+      "R1921",
+      "R1788",
+      "R0616",
+      "R2141"
+    ],
+    "pool_size": 23,
+    "signature": "e98fdb0f1291ffd0d4d9e97230be89d8"
+  },
+  "Q16": {
+    "question": "Do users complain about too many ads or notifications?",
+    "relevant_ids": [
+      "R0049",
+      "R0089",
+      "R0154",
+      "R1121"
+    ],
+    "pool_size": 23,
+    "signature": "06907b4a5709409bff4e1b8f4baf7efa"
+  },
+  "Q17": {
+    "question": "Are there complaints about cancelled orders?",
+    "relevant_ids": [
+      "R0058",
+      "R1917",
+      "R0646",
+      "R1556",
+      "R1863",
+      "R1862",
+      "R1799",
+      "R1711",
+      "R1447",
+      "R1870",
+      "R1109",
+      "R0064"
+    ],
+    "pool_size": 20,
+    "signature": "6635df86166434bd0b819464a8175bd8"
+  },
+  "Q18": {
+    "question": "What do customers say about product size and fit?",
+    "relevant_ids": [
+      "R0364",
+      "R0099"
+    ],
+    "pool_size": 24,
+    "signature": "6cfebe33e0285f6095f1b2b6e2b404a6"
+  },
+  "Q19": {
+    "question": "Do users report bad product quality?",
+    "relevant_ids": [
+      "R0579",
+      "R0771",
+      "R0256",
+      "R1827"
+    ],
+    "pool_size": 19,
+    "signature": "11ba6a392a93dc89549aa2f5d0497181"
+  },
+  "Q20": {
+    "question": "What are the complaints about Amazon India delivery agents?",
+    "relevant_ids": [
+      "R1903",
+      "R1884",
+      "R1815",
+      "R1865",
+      "R1739",
+      "R1757",
+      "R1763",
+      "R1823",
+      "R1803",
+      "R1947",
+      "R1832"
+    ],
+    "pool_size": 20,
+    "signature": "d8b678e5f882a56b5a003c72100c447c"
+  },
+  "Q21": {
+    "question": "Are users facing problems with the search or filter feature in the app?",
+    "relevant_ids": [
+      "R1701",
+      "R0707"
+    ],
+    "pool_size": 22,
+    "signature": "177e92b25018107bb11464ad94c84765"
+  },
+  "Q22": {
+    "question": "Do customers mention high prices or extra charges?",
+    "relevant_ids": [
+      "R2142",
+      "R1370",
+      "R0477",
+      "R1527",
+      "R0349",
+      "R0628",
+      "R1261",
+      "R1089",
+      "R1130",
+      "R2091",
+      "R0391",
+      "R0826",
+      "R0440"
+    ],
+    "pool_size": 20,
+    "signature": "093ebbaa4db8024a577d8e0f2782fefa"
+  },
+  "Q23": {
+    "question": "What do the most critical anomalous complaints talk about?",
+    "relevant_ids": [
+      "R0357",
+      "R1852",
+      "R0794",
+      "R1859",
+      "R1878",
+      "R1976",
+      "R2131"
+    ],
+    "pool_size": 26,
+    "signature": "389dd711f6d27fa19263db0c1a1d82bf"
+  },
+  "Q24": {
+    "question": "Are there complaints about app updates making things worse?",
+    "relevant_ids": [],
+    "pool_size": 26,
+    "signature": "adb43e39824a77c17c13eb1a2893027d"
+  },
+  "Q25": {
+    "question": "Do customers talk about uninstalling the app or switching to a competitor?",
+    "relevant_ids": [
+      "R0803",
+      "R0731",
+      "R1795",
+      "R1977",
+      "R1771"
+    ],
+    "pool_size": 24,
+    "signature": "c10d2ecf86ba4ab563db9dd9a4fda7ac"
+  },
+  "Q26": {
+    "question": "Are customers complaining about coupons or offers not working?",
+    "relevant_ids": [
+      "R0270",
+      "R1190",
+      "R0195"
+    ],
+    "pool_size": 20,
+    "signature": "aef9cae67cf6a47685a9a82ca17cbf63"
+  }
+}
