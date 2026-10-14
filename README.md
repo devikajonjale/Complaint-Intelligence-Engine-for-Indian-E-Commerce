@@ -238,9 +238,3 @@ For the GenAI layer, add a free `GROQ_API_KEY` to a `.env` file (see the GenAI s
 ## Limitations
 
 Play Store reviews skew toward app experience rather than the full order journey. Hinglish detection is dictionary based and will miss unusual spellings. Weak labels encode the rules that wrote them, so the severity and churn scores above are not evidence of generalisation. Cluster count and all reported metrics shift with each fresh scrape.
-
-## Team
-
-Aditya Nariyapara (B009) and Devika Jonjale (B045)
-Mentor: Dr. Rajesh Kumar Maurya
-M.Sc. Data Science, NMIMS Mumbai, 2025-26
