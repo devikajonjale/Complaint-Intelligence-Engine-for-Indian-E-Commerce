@@ -84,7 +84,21 @@ def _reranker():
 
 
 def reranker_available() -> bool:
-    return _reranker() is not None
+    """Whether reranking can be offered, WITHOUT triggering the download.
+
+    Checking this cheaply matters on hosted environments such as Streamlit Community Cloud, where a
+    surprise 464 MB download would exhaust the container's disk and memory budget. Set
+    RAG_ENABLE_RERANK=0 to force the option off regardless of what is cached.
+    """
+    if os.getenv("RAG_ENABLE_RERANK", "1").split("#")[0].strip() in ("0", "false", "no"):
+        return False
+    try:
+        from huggingface_hub import try_to_load_from_cache
+
+        # Look for the weights themselves: a cached config.json alone does not mean a usable model.
+        return isinstance(try_to_load_from_cache(RERANK_MODEL, "model.safetensors"), str)
+    except Exception:  # noqa: BLE001 - hub offline or unavailable
+        return False
 
 
 def allowed_mask(df, filters: dict | None) -> np.ndarray | None:

@@ -58,8 +58,15 @@ def render_rag_chat() -> None:
     anomaly_only = c3.checkbox("Critical anomalies only")
     k = c4.slider("Reviews to retrieve", 3, 15, 8)
     c5, c6 = st.columns([2, 2])
-    variant = c5.selectbox("Retrieval", ["hybrid", "rerank", "dense"], help="\n".join(f"{k2}: {v}" for k2, v in VARIANT_HELP.items()))
+    # Reranking is offered only when its weights are already on disk. On a hosted deployment the
+    # download would be far larger than the container allows, so the option is hidden instead.
+    from rag.retriever import reranker_available
+
+    options = ["hybrid", "rerank", "dense"] if reranker_available() else ["hybrid", "dense"]
+    variant = c5.selectbox("Retrieval", options, help="\n".join(f"{k2}: {v}" for k2, v in VARIANT_HELP.items()))
     c6.caption(VARIANT_HELP[variant])
+    if "rerank" not in options:
+        c6.caption("Reranking is unavailable here because its model is not downloaded.")
 
     _warm(variant)
     ok, err = _llm_ready()

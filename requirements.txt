@@ -1,5 +1,9 @@
-# Complaint Intelligence Engine — Requirements
+# Complaint Intelligence Engine - Requirements
 # Install: pip install -r requirements.txt
+#
+# CPU-only PyTorch. On Linux the default PyPI torch wheel pulls about 2.5 GB of CUDA
+# dependencies, which exceeds the disk budget on Streamlit Community Cloud.
+--extra-index-url https://download.pytorch.org/whl/cpu
 
 google-play-scraper>=1.2.6
 python-dotenv>=1.0.0

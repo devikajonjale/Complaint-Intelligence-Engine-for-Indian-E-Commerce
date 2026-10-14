@@ -1,0 +1,14 @@
+# Streamlit configuration. Secrets live in .streamlit/secrets.toml locally (gitignored) and in the
+# app settings on Streamlit Community Cloud. Never commit secrets.
+
+[server]
+headless = true
+# The dashboard reads committed CSVs, so file watching only adds overhead in a hosted container.
+fileWatcherType = "none"
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "light"
+primaryColor = "#C2185B"
