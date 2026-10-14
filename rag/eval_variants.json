@@ -1,0 +1,71 @@
+{
+  "dense": {
+    "retrieval": {
+      "hit_rate@1": 0.5,
+      "hit_rate@3": 0.731,
+      "hit_rate@5": 0.846,
+      "hit_rate@8": 0.923,
+      "precision@1": 0.5,
+      "precision@3": 0.436,
+      "precision@5": 0.469,
+      "precision@8": 0.505,
+      "recall@1": 0.077,
+      "recall@3": 0.177,
+      "recall@5": 0.282,
+      "recall@8": 0.499,
+      "mrr@8": 0.634
+    },
+    "retrieval_latency_s": {
+      "mean": 0.046,
+      "p50": 0.041,
+      "p95": 0.08
+    },
+    "n_scored": 26
+  },
+  "hybrid": {
+    "retrieval": {
+      "hit_rate@1": 0.615,
+      "hit_rate@3": 0.769,
+      "hit_rate@5": 0.846,
+      "hit_rate@8": 0.962,
+      "precision@1": 0.615,
+      "precision@3": 0.538,
+      "precision@5": 0.485,
+      "precision@8": 0.433,
+      "recall@1": 0.116,
+      "recall@3": 0.257,
+      "recall@5": 0.347,
+      "recall@8": 0.453,
+      "mrr@8": 0.718
+    },
+    "retrieval_latency_s": {
+      "mean": 0.046,
+      "p50": 0.043,
+      "p95": 0.059
+    },
+    "n_scored": 26
+  },
+  "rerank": {
+    "retrieval": {
+      "hit_rate@1": 0.692,
+      "hit_rate@3": 0.808,
+      "hit_rate@5": 0.923,
+      "hit_rate@8": 0.962,
+      "precision@1": 0.692,
+      "precision@3": 0.615,
+      "precision@5": 0.538,
+      "precision@8": 0.486,
+      "recall@1": 0.1,
+      "recall@3": 0.241,
+      "recall@5": 0.356,
+      "recall@8": 0.487,
+      "mrr@8": 0.771
+    },
+    "retrieval_latency_s": {
+      "mean": 1.847,
+      "p50": 1.875,
+      "p95": 2.277
+    },
+    "n_scored": 26
+  }
+}

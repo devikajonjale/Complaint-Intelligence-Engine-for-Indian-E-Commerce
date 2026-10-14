@@ -6,7 +6,7 @@ This document is the **authoritative project overview**: objectives, **data**, *
 
 ## 1. Abstract and objectives
 
-The **Complaint Intelligence Engine** is an end-to-end pipeline and **Streamlit** dashboard for **Indian e-commerce complaints** (primarily **Google Play** reviews; optional **Reddit**). It:
+The **Complaint Intelligence Engine** is an end-to-end pipeline and **Streamlit** dashboard for **Indian e-commerce complaints** (**Google Play** reviews). It:
 
 - Ingests and cleans **multilingual** text (including **Hinglish**).
 - Builds **TF-IDF** and **multilingual Sentence-BERT** representations.
@@ -44,7 +44,6 @@ The **Complaint Intelligence Engine** is an end-to-end pipeline and **Streamlit*
 | Source | Mechanism | Configuration (code) |
 |--------|-----------|-------------------------|
 | **Google Play** | `google-play-scraper` | Apps: Myntra, Meesho, Nykaa, Flipkart, Amazon India; `en` + `hi`; `country=in`; up to **500** reviews per app per language; newest first (`01_ingest.py`) |
-| **Reddit** | `praw` + `python-dotenv` | Subreddits e.g. `IndianShopping`, `Meesho`, `india`; keyword filter; limit **200**; requires `.env` credentials |
 
 ### 3.2 Documented run (`PROJECT_REPORT.md`)
 
@@ -53,7 +52,6 @@ These figures are **example** counts from one execution; live runs differ.
 | Stage | Value |
 |-------|--------|
 | Play Store rows fetched | 4,768 |
-| Reddit | Failed (401) without credentials |
 | After merge + clean | 2,389 |
 | After preprocess + dedup | 2,253 |
 | Hinglish-flagged reviews | 196 (~8.7%) |
@@ -104,7 +102,6 @@ flowchart LR
 flowchart TB
   subgraph ingest["Acquisition"]
     GP[Google Play]
-    RD[Reddit PRAW]
   end
 
   subgraph core["Core pipeline"]
@@ -127,7 +124,6 @@ flowchart TB
   S07[07 Visualize — 10 charts]
 
   GP --> S01
-  RD --> S01
   S01 --> S02 --> S03 --> S04 --> S05 --> S06
   S06 --> S08 --> S09 --> S10 --> S11 --> S12 --> S07
   S06 --> REG[models/selected_models.json]
@@ -394,7 +390,6 @@ No classifier: **weekly** centroid + JS + z-based **alerts**; summary rows → `
 | **Churn proxy** | Not observed churn; **PR-AUC** reflects the **length / 1-star** heuristic, not true attrition. |
 | **Spike / drift z-rules** | **Not** multiple-testing adjusted; Gaussian assumption for counts **unstated**. |
 | **OCSVM** | May **degrade** if “positive” cluster is too small (fallback path). |
-| **Reddit** | Optional; often absent without credentials. |
 
 **Mitigations:** Time-based validation; human labels; remove rule features from severity inputs; calibration plots; per-class error analysis; frozen evaluation sets.
 
@@ -404,12 +399,14 @@ No classifier: **weekly** centroid + JS + z-based **alerts**; summary rows → `
 
 | Layer | Technologies |
 |-------|----------------|
-| Ingestion | `google-play-scraper`, `praw`, `python-dotenv` |
+| Ingestion | `google-play-scraper` |
 | Tables / numerics | `pandas`, `numpy`, `scipy` |
 | NLP | `langdetect`, `sentence-transformers`, `torch` |
 | ML | `scikit-learn`, `umap-learn`, `hdbscan` |
 | Viz | `matplotlib`, `seaborn`, `plotly` |
 | App | `streamlit`, `joblib` |
+| GenAI / RAG | `langchain`, `faiss-cpu`, `rank-bm25`, `langchain-groq`, `pydantic` |
+| Testing | `pytest`, GitHub Actions |
 
 ---
 
@@ -428,6 +425,30 @@ No classifier: **weekly** centroid + JS + z-based **alerts**; summary rows → `
 | Auto-Responder | Live templates + pipeline metrics/charts |
 | Drift Monitor | Plotly lines + drift table + summary metrics/charts |
 | Pipeline & ML figures | Full gallery of `viz_*` and `ml_figures` |
+| Ask the Complaints (RAG) | Grounded Q&A over the reviews with citations, filters and streaming |
+| LLM Cluster Insights | LLM cluster labels, root causes, owning teams and the executive brief generator |
+
+---
+
+## 12b. GenAI layer (RAG, LLM labelling, reports)
+
+A retrieval augmented layer sits on top of the pipeline outputs and reuses the same Sentence-BERT
+vectors from `03_embed.py`, so retrieval, clustering and anomaly detection share one embedding space.
+Full details and measured metrics are in `README.md`.
+
+| Component | File | Role |
+|-----------|------|------|
+| Vector store | `rag/build_index.py` | Persistent FAISS index over all reviews, built from `data/embeddings.npy`, with platform, rating, date, cluster, severity, anomaly and routing metadata. Idempotent via an input fingerprint |
+| Retrieval | `rag/retriever.py` | Three variants: dense (FAISS cosine), hybrid (dense + BM25 fused by Reciprocal Rank Fusion) and rerank (hybrid shortlist re-scored by a local multilingual cross-encoder). Metadata filters applied before ranking |
+| Q&A chain | `rag/chain.py` | LCEL chain with a grounded prompt that forces `[R####]` citations or a fixed refusal, plus follow-up condensation and token streaming |
+| Cluster labelling | `rag/cluster_insights.py` | Pydantic structured output per cluster (label, summary, root causes, owning team), sampled from the complaints nearest each centroid and cached to JSON |
+| Reporting | `rag/report.py` | Executive markdown brief; all figures computed in pandas, the LLM only writes the prose |
+| Evaluation | `rag/evaluate.py`, `rag/label_eval_set.py` | Hit rate, MRR, precision and recall against pooled judge-labelled ground truth, plus LLM-as-judge faithfulness and relevance, citation validity, refusal accuracy and latency |
+| Tests | `tests/`, `.github/workflows/ci.yml` | 30 tests and a CI pipeline that run with no API key and make no LLM calls |
+
+**Models.** Answers and labels use Groq `openai/gpt-oss-20b`; the judge uses the larger
+`openai/gpt-oss-120b`. Both are pinned in `rag/config.py`. Embedding and reranking run locally on
+CPU. Everything sits on free tiers or local compute.
 
 ---
 
